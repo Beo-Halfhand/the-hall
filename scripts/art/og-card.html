@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- The link-preview card, 1200x630 (11-06, round 2): The owner's Grok table room, cropped to the lantern, the window and the table's far
+     half; his upright Grok cup on the table with gold dice and a few coins in the lantern light; "The Hall" in the site's own heading
+     serif (Cinzel), gold, with the two games under it and halfhand.app small, bottom left over the table wood. The official Midnight
+     symbol, small, on the wood wall beside the tapestry, lit like the room (body.no-symbol leaves it out). Rendered by og-card.mjs. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Alegreya+SC:wght@500;700&display=swap">
+  <style>
+    html, body { margin: 0; background: #0a0816; }
+    .card { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0a0816; font-family: 'Alegreya SC', Georgia, serif; }
+    /* the picture (1152 x 1728) at 1200 wide is 1800 tall; rows 430 to 1035 are in the frame */
+    .room { position: absolute; left: 0; top: -448px; width: 1200px; height: 1800px; background: url(../../public/art/dice/table-room-1152.webp) 0 0 / 1200px 1800px no-repeat; }
+    /* lantern light: a warm pool from the lamp (top centre) over the table, and dusk at the edges */
+    .light { position: absolute; inset: 0; background: radial-gradient(ellipse 46% 60% at 50% 12%, rgba(255, 196, 96, 0.22), rgba(255, 170, 60, 0.08) 45%, transparent 70%); }
+    .dusk { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 8, 22, 0.55), rgba(10, 8, 22, 0.1) 38%, transparent 55%), linear-gradient(180deg, transparent 55%, rgba(10, 8, 22, 0.45)); }
+    /* the symbol on the wood wall beside the tapestry: the brand file as it is, at the room's opacity, warmed by the lamp */
+    .mark { position: absolute; left: 330px; top: 92px; width: 92px; height: 92px; opacity: 0.6; filter: sepia(0.85) saturate(1.3) brightness(1.25); mix-blend-mode: overlay; }
+    .no-symbol .mark { display: none; }
+    /* the cup on the table, lit from the lamp side, with its shadow on the wood */
+    .cup-shadow { position: absolute; left: 846px; top: 556px; width: 210px; height: 34px; border-radius: 50%; background: radial-gradient(closest-side, rgba(12, 6, 3, 0.75), rgba(12, 6, 3, 0.35) 55%, transparent); filter: blur(2px); transform: translateX(28px); }
+    .cup { position: absolute; left: 860px; top: 318px; width: 162px; height: 256px; background: url(../../public/art/dice/cup-up.webp) 50% 100% / contain no-repeat; filter: brightness(1.06); }
+    .die { position: absolute; width: 54px; height: 54px; background: url(../../public/art/dice/dice.svg) 0 0 / 600% 100% no-repeat; border-radius: 9px; filter: drop-shadow(0 5px 3px rgba(12, 6, 3, 0.7)); }
+    .die::after { content: ''; position: absolute; inset: 0; border-radius: 9px; background: linear-gradient(160deg, #ffe08a, #e2a52a 55%, #a86f12); mix-blend-mode: multiply; } /* gold dice: the ivory faces take the gold, the pips stay dark */
+    .die.f5 { background-position: 100% 0; left: 752px; top: 528px; transform: rotate(-9deg); }
+    .die.f3 { background-position: 40% 0; left: 814px; top: 548px; transform: rotate(14deg); }
+    .die.f6 { background-position: 80% 0; left: 1046px; top: 534px; transform: rotate(7deg); }
+    .die.f1 { background-position: 0 0; left: 1108px; top: 552px; transform: rotate(-16deg); }
+    .coin { position: absolute; width: 22px; height: 10px; border-radius: 50%; background: radial-gradient(ellipse at 40% 35%, #ffe48a, #d9a12d 60%, #8a5d12); box-shadow: 0 2px 0 #6b4409, 0 4px 4px rgba(12, 6, 3, 0.6); }
+    .coin.a { left: 1000px; top: 586px; } .coin.b { left: 1004px; top: 579px; } .coin.c { left: 1008px; top: 572px; }
+    .coin.d { left: 1032px; top: 590px; transform: rotate(-20deg); }
+    /* the words, bottom left over the table wood */
+    .words { position: absolute; left: 54px; bottom: 44px; color: #f4efe2; }
+    .band { position: absolute; left: 0; right: 0; bottom: 0; height: 290px; background: linear-gradient(180deg, transparent, rgba(10, 8, 22, 0.55) 60%, rgba(10, 8, 22, 0.75)); }
+    .title { margin: 0; font: 700 118px/1 'Cinzel', Georgia, serif; letter-spacing: 0.02em; color: #ffc24d; text-shadow: 0 4px 0 #1c1006, 0 0 28px rgba(0, 0, 0, 0.85), 0 2px 18px rgba(0, 0, 0, 0.7); }
+    .games { margin: 14px 0 0; font: 500 42px/1.1 'Alegreya SC', Georgia, serif; letter-spacing: 0.04em; color: #f4efe2; text-shadow: 0 2px 0 #1c1006, 0 0 16px rgba(0, 0, 0, 0.85); }
+    .games .dot { color: #ffc24d; padding: 0 10px; }
+    .site { margin: 12px 0 0; font: 500 26px/1 'Alegreya SC', Georgia, serif; letter-spacing: 0.12em; color: #cbbfe3; text-shadow: 0 2px 0 #1c1006, 0 0 12px rgba(0, 0, 0, 0.85); }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="room"></div>
+    <div class="light"></div>
+    <div class="dusk"></div>
+    <img class="mark" src="../../public/brand/midnight/Midnight-RGB_Symbol-White.svg" alt="">
+    <div class="cup-shadow"></div>
+    <div class="cup"></div>
+    <div class="die f5"></div><div class="die f3"></div><div class="die f6"></div><div class="die f1"></div>
+    <div class="coin a"></div><div class="coin b"></div><div class="coin c"></div><div class="coin d"></div>
+    <div class="band"></div>
+    <div class="words">
+      <h1 class="title">The Hall</h1>
+      <p class="games">Sealed Hand<span class="dot">·</span>Cup &amp; Claim</p>
+      <p class="site">halfhand.app</p>
+    </div>
+  </div>
+</body>
+</html>

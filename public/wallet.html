@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Cage</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/cage.css">
+  <link rel="stylesheet" href="/css/wallet.css">
+  <script type="module" src="/js/wallet.js"></script>
+</head>
+<body class="cage-page">
+  <header class="cage-head">
+    <h1 id="bring-title">The Cage</h1>
+    <p class="cage-sub" id="bring-stakes">Bring test tNIGHT to the tables with your Midnight wallet. <b>Preprod only. No real money.</b></p>
+  </header>
+
+  <div class="cage-stop" id="stop" role="alert" hidden></div>
+
+  <main class="cage-path" id="bring-box">
+    <!-- 1 -->
+    <section class="box step" id="connect-box" data-step="wallet" aria-labelledby="connect-title">
+      <h2 class="box-title" id="connect-title"><span class="step-no">1</span> Choose your wallet</h2>
+      <div class="wallet-list" id="wallets"></div>
+      <div id="connect-root"></div>
+      <div id="wallet" hidden>
+        <p class="wallet-line"><b id="wallet-name"></b> <span class="cage-num" id="night">…</span> <span class="quiet-inline" id="dust">…</span> <span class="dust-badge" id="dust-badge" hidden></span></p>
+        <p class="cage-note connected-note" id="connected-note" role="status" hidden></p>
+        <p class="cage-note"><code id="address"></code> <button class="btn small" id="copy-address" type="button">Copy</button></p>
+        <p class="cage-note" id="dust-address-line" hidden>tDUST address <code id="dust-address"></code></p>
+        <div class="row-buttons">
+          <button class="btn small" id="refresh" type="button">Refresh</button>
+          <button class="btn small" id="switch-wallet" type="button">Use another wallet</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="box step" id="buy-box" data-step="buy" aria-labelledby="buy-title">
+      <h2 class="box-title" id="buy-title"><span class="step-no">2</span> Buy in</h2>
+      <p class="prose" id="buy-intro"></p>
+      <div id="buy-body"></div>
+      <a class="btn small" id="bring-to-table" href="/" hidden>Watch the table</a>
+    </section>
+
+    <!-- 3, with a table: the judge -->
+    <section class="box step" id="seat-box" data-step="seat" hidden aria-labelledby="seat-title">
+      <h2 class="box-title" id="seat-title"><span class="step-no">3</span> The judge seats you</h2>
+      <p class="prose" id="seat-status" role="status"></p>
+      <form class="cage-action" id="bring-claim" novalidate hidden>
+        <label>Another name <input id="bring-claim-name" maxlength="24" autocomplete="off"></label>
+        <button class="btn primary" id="bring-claim-go" type="submit">Take my seat</button>
+      </form>
+    </section>
+
+    <!-- 3, from the door: the Hall -->
+    <section class="box step" id="hall-box" data-step="done" hidden aria-labelledby="hall-title">
+      <h2 class="box-title" id="hall-title"><span class="step-no">3</span> Go to the Hall</h2>
+      <p class="prose" id="hall-note">Pick a table in the Hall. Your cage money works at any tNIGHT table there, and the judge seats you with nothing to approve.</p>
+      <a class="btn primary big" id="bring-to-hall" href="/">Go to the Hall</a>
+    </section>
+
+    <p class="back-line"><a class="btn small" id="bring-back" href="/">Back to the Hall</a></p>
+
+    <details class="box fold" id="my-cage">
+      <summary><span class="box-title">My cage</span> <span class="fold-note" id="my-cage-note"></span></summary>
+      <p class="key-warning" id="read-only" hidden></p>
+      <dl class="cage-facts">
+        <dt>Contract</dt><dd><code id="cage-address"></code> <span class="cage-tag" id="cage-name"></span></dd>
+        <dt>Your balance</dt><dd class="cage-num" id="my-balance">…</dd>
+        <dt>Your seat</dt><dd id="my-seat">…</dd>
+        <dt>Your permit</dt><dd id="my-permit">…</dd>
+      </dl>
+      <form class="cage-action" id="withdraw-form" novalidate>
+        <label>Withdraw, in tNIGHT <input id="withdraw-amount" inputmode="decimal" autocomplete="off"></label>
+        <button class="btn primary" id="withdraw" type="submit">Withdraw</button>
+        <p class="why" id="withdraw-why"></p>
+        <p class="cage-note" id="withdraw-note"></p>
+      </form>
+      <div class="cage-action">
+        <button class="btn" id="stand" type="button">Stand from my table</button>
+        <p class="why" id="stand-why"></p>
+        <p class="cage-note" id="stand-note">Standing is a request, and it ends your permit. The next settle frees your seat, or the table goes quiet and frees it for you.</p>
+      </div>
+      <div class="cage-action">
+        <button class="btn" id="revoke" type="button">Revoke my permit</button>
+        <p class="why" id="revoke-why"></p>
+        <p class="cage-note" id="revoke-note">The judge can’t seat or move you after this, until you grant it again. A seat you already hold stays until it’s settled, released or stood from. Nothing the judge does can stop a revoke.</p>
+      </div>
+      <div class="cage-action">
+        <h3 class="cage-h3">Your player key</h3>
+        <p class="key-warning"><b>Your key is your seat in the cage.</b> Anyone who has it can sit you at a table and put your balance at risk. They can’t send it anywhere but your own address. Keep it private. Never shown in addresses or logs.</p>
+        <p class="prose" id="key-state"></p>
+        <button class="btn" id="copy-key" type="button">Copy my player key</button>
+        <p class="why" id="copy-key-why"></p>
+        <form class="cage-action" id="restore-form" novalidate>
+          <label>Restore a key <input id="restore-key" type="password" autocomplete="off" spellcheck="false"></label>
+          <button class="btn" type="submit">Restore</button>
+        </form>
+      </div>
+      <div class="cage-action">
+        <h3 class="cage-h3">Lost your key?</h3>
+        <p class="prose">Your wallet can’t rebuild it, but your deposit isn’t lost. The cage remembers your address, and anyone can send a balance home once its seat is free.</p>
+        <button class="btn" id="find" type="button">Find deposits sent from this address</button>
+        <p class="why" id="find-why"></p>
+        <ul class="cage-found" id="found"></ul>
+      </div>
+      <div class="cage-action" id="sponsor-box" hidden>
+        <h3 class="cage-h3">Test: sign with no tDUST</h3>
+        <p class="prose">Builds a call, asks your wallet to balance it without paying the fee, and looks inside. Nothing is sent, and no tNIGHT or tDUST moves. Your wallet will ask you to approve.</p>
+        <button class="btn" id="probe" type="button">Run the test</button>
+        <p class="why" id="probe-why"></p>
+        <p class="prose" id="probe-result" role="status"></p>
+      </div>
+    </details>
+
+    <details class="box fold" id="checks-box">
+      <summary><span class="box-title">Checks</span> <span class="fold-note" id="checks-note"></span></summary>
+      <ul class="cage-checks" id="checks"></ul>
+      <form id="indexer-form" novalidate hidden>
+        <p class="prose">No indexer answers, so this page can’t read the cage. Paste a Blockfrost <b>Midnight Preprod</b> project ID. It stays in this tab and goes only to Blockfrost.</p>
+        <label>Project ID <input id="indexer-id" type="password" autocomplete="off" spellcheck="false"></label>
+        <button class="btn" type="submit">Use it</button>
+      </form>
+    </details>
+
+    <details class="box fold" id="log-box">
+      <summary><span class="box-title">What happened</span> <span class="fold-note" id="log-note"></span></summary>
+      <p class="cage-progress" id="progress" role="status"></p>
+      <ol class="cage-log" id="log"></ol>
+    </details>
+  </main>
+  <!-- Support the build: one slim line on every public page (11-08); the addresses open on a tap. Filled by js/support.js. -->
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+
+</body>
+</html>

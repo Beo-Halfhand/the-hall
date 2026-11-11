@@ -1,0 +1,88 @@
+# Local dev and tests: `npm run dev` and every test server read this. No account, no login, no [ai] and no
+# routes, so nothing here can reach Cloudflare. Bot voices use the scripted lines, or the mock on a test table.
+name = "sealed-hand"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+send_metrics = false
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true # so the Worker can redirect the old address and set page headers
+
+[[durable_objects.bindings]]
+name = "TABLE"
+class_name = "Table"
+
+[[durable_objects.bindings]]
+name = "PLAYER"
+class_name = "Player"
+
+[[durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "Directory"
+
+[[durable_objects.bindings]]
+name = "DICE_TABLE"
+class_name = "DiceTable"
+
+[[durable_objects.bindings]]
+name = "RECEIPTS"
+class_name = "ReceiptBook"
+
+# The seal-anchor queue (platform/anchor.js). Inert unless ANCHOR_MODE is set (tests pass it with --var).
+[[durable_objects.bindings]]
+name = "ANCHOR_QUEUE"
+class_name = "AnchorQueue"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Table"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Player", "Directory"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["DiceTable"]
+
+[[migrations]]
+tag = "v4"
+new_sqlite_classes = ["ReceiptBook"]
+
+[[migrations]]
+tag = "v5"
+new_sqlite_classes = ["AnchorQueue"]
+
+# Per-IP limits. Approximate and per Cloudflare location. Period must be 10 or 60 seconds.
+[[ratelimits]]
+name = "LIMIT_PLAYERS"
+namespace_id = "2001"
+simple = { limit = 5, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_TABLES"
+namespace_id = "2002"
+simple = { limit = 10, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_JOIN"
+namespace_id = "2003"
+simple = { limit = 20, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_SAY"
+namespace_id = "2004"
+simple = { limit = 30, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_INDEXER"
+namespace_id = "2005"
+simple = { limit = 240, period = 60 }
+
+# Per token (seat, player or door token), wherever it comes from: about 5 requests a second (11-08, bring your own agent).
+[[ratelimits]]
+name = "LIMIT_KEY"
+namespace_id = "2006"
+simple = { limit = 300, period = 60 }

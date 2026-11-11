@@ -1,0 +1,358 @@
+/* Cup & Claim, on top of inn.css. Phone first: one column, the cup and the Liar button under the thumb. */
+
+:root {
+  --die: 44; /* die size in CSS pixels, set by JS */
+  --scene-w: 576;
+  --scene-h: 484;
+}
+
+/* ---------- the plaque ---------- */
+
+.plaque {
+  margin: 8px 8px 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, var(--wood-2), var(--wood-1));
+  border: 2px solid var(--wood-0);
+  box-shadow: inset 0 1px 0 var(--wood-hi), 0 2px 0 var(--wood-0);
+  text-align: center;
+}
+
+.plaque-label { display: block; font: 500 13px/1.2 var(--label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber-2); }
+.plaque-line { margin: 2px 0 0; font: italic 400 18px/1.3 var(--body); color: var(--cream-1); }
+
+/* ---------- the scene: the upstairs room, with the pot on the felt ---------- */
+
+.dice-scene-wrap { background: var(--ink); }
+
+.dice-scene {
+  background: url(/art/dice/room.png) 0 0 / 100% 100% no-repeat;
+  width: calc(var(--scene-w) * var(--s) * 1px);
+  height: calc(var(--scene-h) * var(--s) * 1px);
+}
+
+.dice-scene .night { display: none; }
+
+.dice-scene .pot-on-felt { left: 50%; top: 71%; transform: translate(-50%, -50%); }
+
+.dice-scene .felt-bid {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  padding: 4px 12px;
+  background: rgba(10, 8, 22, 0.78);
+  border: 2px solid var(--amber-0);
+  color: var(--amber-3);
+  font: 700 18px/1.2 var(--label);
+  white-space: nowrap;
+}
+
+.dice-scene .felt-bid small { display: block; font: 400 13px/1.2 var(--label); color: var(--slate-3); }
+
+/* ---------- the cups: one card per seat (the card itself is seat-cards.css; the rows are saloon.css) ---------- */
+
+.cup-card.bidder { border-color: var(--oak-1); }
+.cup-card .owed { color: var(--wine-3); font-size: 13px; }
+
+.cup-card.folded .cup-icon, .cup-card.out .cup-icon { filter: grayscale(0.8) brightness(0.5); }
+
+.cup-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 4px auto 2px;
+  background: url(/art/dice/cup-down-s.webp) center / contain no-repeat; /* the Grok cup, turned down (11-06); the small sharpened copy (round 3) */
+  image-rendering: auto;
+}
+
+.cup-icon.drawn { background-image: url(/art/dice/cup-drawn.png); }
+.cup-icon.empty { opacity: 0.2; }
+
+.cup-answer { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; min-height: 22px; margin-top: 2px; }
+
+.count-badge {
+  display: inline-grid;
+  place-items: center;
+  padding: 2px 8px;
+  background: var(--ink);
+  border: 2px solid var(--felt-2);
+  color: var(--cream-1);
+  font: 700 15px/1.2 var(--label);
+}
+
+.count-badge small { font: 400 11px/1.1 var(--label); color: var(--slate-3); }
+.count-badge.show { border-color: var(--amber-1); }
+
+.mode-tag { font: 500 12px/1.2 var(--label); color: var(--slate-3); }
+.mode-tag.show { color: var(--amber-2); }
+.mode-tag.prove { color: #7fdcc4; }
+
+/* ---------- dice ---------- */
+
+.die {
+  display: inline-block;
+  width: calc(var(--die) * 1px);
+  height: calc(var(--die) * 1px);
+  /* The sharp, bright faces chosen (11-06): ivory, soft corners, round pips, the wild 1 in amber (dice.svg, the strip
+     live has used since 11-04). Six in a row, sized in %, so any size the page draws a die at picks the right face. */
+  background: url(/art/dice/dice.svg) 0 0 / 600% 100% no-repeat;
+  background-position: calc((var(--face, 1) - 1) * 20%) 0;
+  border-radius: 22%;
+  image-rendering: auto; /* a vector strip: smooth at every size, whatever the page around it does */
+  flex: 0 0 auto;
+}
+
+.die.small { --die: 22; }
+.die.wild { box-shadow: 0 0 0 2px var(--amber-1); }
+.die.bid-face { --die: 18; vertical-align: -3px; }
+
+/* ---------- your cup: the shake and the slam ---------- */
+
+.cup-stage { display: grid; place-items: center; }
+
+.cup-felt {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  min-height: calc(var(--die) * 2.4px);
+  padding: calc(var(--die) * 0.5px) 8px;
+  background: radial-gradient(ellipse at 50% 40%, #2a7d68 0%, #1a5650 55%, #11383c 100%);
+  border: 3px solid var(--wood-1);
+  box-shadow: inset 0 0 0 2px var(--wood-0), inset 0 0 24px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.cup-felt.painted { background-image: url(/art/dice/hero.png); background-size: cover; background-position: center 35%; image-rendering: pixelated; }
+.cup-felt.painted::before { content: ''; position: absolute; inset: 0; background: rgba(10, 8, 22, 0.35); }
+
+.my-dice { position: relative; z-index: 1; display: flex; justify-content: center; gap: calc(var(--die) * 0.18px); min-height: calc(var(--die) * 1px); }
+.my-dice .die { opacity: 0; transform: scale(0.6); }
+.my-dice.shown .die { opacity: 1; transform: none; transition: opacity 0.25s ease-out, transform 0.3s cubic-bezier(0.2, 1.4, 0.4, 1); }
+.my-dice.shown .die:nth-child(2) { transition-delay: 0.05s; }
+.my-dice.shown .die:nth-child(3) { transition-delay: 0.1s; }
+.my-dice.shown .die:nth-child(4) { transition-delay: 0.15s; }
+.my-dice.shown .die:nth-child(5) { transition-delay: 0.2s; }
+.my-dice.sealed .die { opacity: 0.18; transform: none; filter: grayscale(1); }
+
+.cup-sprite {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--cup-w, 94) * 1px); /* whole pixels (round 3): js rounds 2.6 and 2.5 dice */
+  height: calc(var(--cup-h, 90) * 1px);
+  transform: translate(-50%, -52%);
+  background: url(/art/dice/cup-down.webp) center / contain no-repeat; /* the Grok cup, turned down over your dice (11-06) */
+  image-rendering: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.55));
+}
+
+.cup-sprite.drawn { background-image: url(/art/dice/cup-drawn.png); }
+.cup-sprite.lifted { opacity: 0; transform: translate(-50%, -140%) rotate(-12deg); transition: transform 0.45s ease-in, opacity 0.35s ease-in 0.1s; }
+.cup-sprite.shake { animation: cup-shake 0.9s ease-in-out; }
+.cup-sprite.slam { animation: cup-slam 0.28s cubic-bezier(0.6, 0, 1, 1) forwards; }
+.cup-sprite.shut { transform: translate(-50%, -52%); opacity: 1; }
+.cup-felt.rattle { animation: felt-rattle 0.25s ease-out; }
+
+@keyframes cup-shake {
+  0% { transform: translate(-50%, -110%) rotate(0deg); }
+  15% { transform: translate(-62%, -118%) rotate(-14deg); }
+  30% { transform: translate(-38%, -104%) rotate(12deg); }
+  45% { transform: translate(-60%, -120%) rotate(-16deg); }
+  60% { transform: translate(-40%, -102%) rotate(14deg); }
+  75% { transform: translate(-56%, -116%) rotate(-10deg); }
+  90% { transform: translate(-46%, -108%) rotate(6deg); }
+  100% { transform: translate(-50%, -110%) rotate(0deg); }
+}
+
+@keyframes cup-slam {
+  0% { transform: translate(-50%, -110%) scaleY(1); }
+  70% { transform: translate(-50%, -52%) scaleY(1); }
+  85% { transform: translate(-50%, -46%) scaleY(0.9); }
+  100% { transform: translate(-50%, -52%) scaleY(1); }
+}
+
+@keyframes felt-rattle {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.counts { margin: 10px 0 0; text-align: center; font: 500 16px/1.4 var(--label); color: var(--slate-3); }
+.counts b { color: var(--cream-1); }
+.counts .count-chip { display: inline-flex; align-items: center; gap: 4px; margin: 2px 3px; padding: 1px 6px 1px 2px; background: var(--ink); border: 1px solid var(--night-3); border-radius: 6px; color: var(--cream-1); }
+
+/* ---------- the move ---------- */
+
+.dice-menu { gap: 10px; }
+
+.bid-picker { display: grid; gap: 8px; padding: 10px; background: var(--ink); border: 2px solid var(--night-2); }
+.picker-label { margin: 0; font: 500 15px/1.2 var(--label); color: var(--slate-3); }
+
+.count-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.count-row { gap: 18px; }
+.count-row .count-value { min-width: 2.2ch; text-align: center; font: 700 52px/1 var(--label); color: var(--amber-3); }
+.count-row .btn { min-width: 72px; min-height: 60px; font-size: 34px; font-weight: 700; }
+.hold-line { margin: 0; text-align: center; font: 500 16px/1.3 var(--body, Georgia, serif); font-variant-caps: normal; text-transform: none; letter-spacing: 0; color: var(--amber-3); }
+.bid-hint { display: block; margin-top: 4px; font: 500 14px/1.3 var(--label); color: var(--slate-3); }
+
+.face-row { display: flex; justify-content: center; gap: 6px; }
+.face-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 4px;
+  min-width: 0;
+  background: var(--night-0);
+  border: 2px solid var(--night-3);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.face-btn[aria-pressed='true'] { border-color: var(--amber-2); background: var(--night-1); box-shadow: 0 0 0 2px var(--amber-0); }
+.face-btn[disabled] { opacity: 0.35; cursor: not-allowed; }
+.face-btn .die { width: calc(var(--pick-die, var(--die)) * 1px); height: calc(var(--pick-die, var(--die)) * 1px); } /* sized to the move column (dice.js fit) */
+.face-btn .held { font: 500 12px/1 var(--label); color: var(--slate-3); }
+.face-btn[aria-pressed='true'] .held { color: var(--amber-3); }
+
+.raise-beside { display: grid; gap: 6px; padding: 8px; background: var(--night-0); border: 2px dashed var(--night-3); }
+.raise-beside .raise-row input { max-width: 110px; }
+.raise-beside .raise-title { margin: 0; font: 500 15px/1.2 var(--label); color: var(--slate-3); }
+.raise-beside .raise-title b { color: var(--amber-3); }
+.raise-beside.off { opacity: 0.75; }
+
+.limit-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--stain-1);
+  border: 2px solid var(--wine-3);
+  color: var(--cream-1);
+  font: 700 13px/1.2 var(--label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pot-limit { margin-left: 6px; font-size: 13px; color: var(--slate-3); }
+.pot-limit.reached { color: var(--wine-3); font-weight: 700; }
+
+.btn.liar {
+  width: 100%;
+  min-height: 64px;
+  font: 700 26px/1.1 var(--title);
+  letter-spacing: 0.08em;
+  background: var(--grain), linear-gradient(180deg, var(--stain-2), var(--stain-1) 60%, #4a1018);
+  color: var(--cream-1);
+  border-color: #2a0810;
+  box-shadow: inset 0 1px 0 rgba(255, 200, 200, 0.25), inset 0 -2px 0 rgba(0, 0, 0, 0.5), 0 3px 0 #2a0810, 0 4px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.btn.liar small { display: block; font: 400 14px/1.2 var(--label); letter-spacing: 0; text-transform: none; }
+
+.owed-line { margin: 0; font: 500 15px/1.3 var(--label); color: var(--wine-3); }
+
+/* ---------- the star moment: prove or show ---------- */
+
+.duel-panel { display: grid; gap: 10px; }
+.duel-head { margin: 0; padding: 10px; background: var(--ink); border: 2px solid var(--wine-3); font: 500 17px/1.35 var(--label); }
+.duel-head b { color: var(--amber-3); }
+.choices { display: grid; gap: 10px; }
+@media (min-width: 560px) { .choices { grid-template-columns: 1fr 1fr; } }
+
+.choice {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  min-height: 120px;
+  text-align: left;
+  background: var(--grain), linear-gradient(180deg, var(--wood-3), var(--wood-1));
+  border: 2px solid var(--wood-0);
+  border-radius: 10px;
+  color: var(--cream-1);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 var(--wood-hi), 0 3px 0 var(--wood-0), 0 4px 8px rgba(0, 0, 0, 0.45);
+}
+
+.choice:hover:not([disabled]) { filter: brightness(1.1); }
+.choice:active:not([disabled]) { transform: translateY(2px); }
+.choice[disabled] { opacity: 0.6; cursor: default; }
+.choice.prove { border-color: #1a5650; box-shadow: inset 0 1px 0 var(--wood-hi), 0 3px 0 #11383c, 0 0 0 2px #2a7d68, 0 4px 8px rgba(0, 0, 0, 0.45); }
+.choice.show { border-color: var(--oak-0); box-shadow: inset 0 1px 0 var(--wood-hi), 0 3px 0 #4c2d08, 0 0 0 2px var(--oak-1), 0 4px 8px rgba(0, 0, 0, 0.45); }
+.choice .choice-title { font: 700 20px/1.2 var(--label); }
+.choice .choice-what { font: 400 15px/1.35 var(--body); color: var(--cream-1); }
+.choice .choice-note { font: 500 13px/1.3 var(--label); color: var(--amber-3); }
+.choice.prove .choice-title { color: #7fdcc4; }
+.choice.show .choice-title { color: var(--amber-2); }
+
+.chosen-line { margin: 0; padding: 8px 10px; background: var(--ink); border: 2px solid var(--night-2); font: 500 16px/1.35 var(--label); }
+
+/* ---------- the call, counted ---------- */
+
+.call-rows { display: grid; gap: 6px; }
+.call-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 6px 8px; background: var(--ink); border: 2px solid var(--night-2); }
+.call-row.shown { border-color: var(--amber-0); }
+.call-row .call-name { font: 500 15px/1.2 var(--label); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.call-row .call-dice { display: flex; gap: 3px; justify-self: end; }
+.call-row .call-how { font: 400 12px/1.2 var(--label); color: var(--slate-3); }
+.call-total { margin: 8px 0 0; padding: 8px 10px; background: var(--night-0); border: 2px solid var(--amber-0); text-align: center; font: 700 18px/1.3 var(--label); }
+.call-total .holds { color: #7fdcc4; }
+.call-total .falls { color: var(--wine-3); }
+.call-fair { margin: 8px 0 0; font: 400 13px/1.4 var(--body); color: var(--slate-3); overflow-wrap: anywhere; }
+.call-fair code { font-size: 11px; color: var(--slate-3); }
+
+/* ---------- no table ---------- */
+
+.no-table-row { display: grid; gap: 10px; }
+
+/* ---------- rules ---------- */
+
+/* How to play's open/close and Tally's guide: table3.css, shared with Sealed Hand (11-08) */
+
+@media (prefers-reduced-motion: reduce) {
+  .cup-sprite.shake, .cup-sprite.slam, .cup-felt.rattle { animation: none; }
+  .cup-sprite.lifted, .my-dice.shown .die { transition: none; }
+}
+
+/* Bids are read aloud ("at least 1 two", "1s count as wild"): lining figures, so a 1 never looks like an I */
+.hold-line, #bid-confirm, .to-beat, .bid-picker, .liar small, #owed-line { font-variant-numeric: lining-nums; }
+.hold-line, .to-beat, #owed-line { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-variant-caps: normal; }
+#bid-confirm, .liar small { text-transform: none; font-weight: 700; } /* the Bid button keeps the Hall's own face like every other button (11-07); its figures are lining (inn.css), so a 1 never looks like an I */
+
+/* ---------- the round's receipt ---------- */
+
+.receipt-number { font: 700 18px/1.2 var(--label); margin: 0 0 6px; color: var(--amber-3); }
+.receipt-print code { font-size: 13px; word-break: break-all; }
+#round-receipt .result-chain { margin: 6px 0 10px; }
+
+/* short screens (see inn.css): the cup and the bid builder tighten */
+@media (min-width: 980px) and (max-height: 940px) {
+  .cup-felt { max-height: 84px; }
+  .cup-box .counts { margin: 4px 0 0; font-size: 14px; }
+  .bid-picker { gap: 4px; padding: 6px 8px; }
+  .picker-label { font-size: 14px; }
+  .count-row { gap: 12px; }
+  .count-row .count-value { font-size: 34px; }
+  .count-row .btn { min-width: 56px; min-height: 40px; font-size: 24px; }
+  .hold-line { display: none; }
+  .raise-beside { gap: 4px; }
+  .to-beat { margin: 0 0 2px; font-size: 15px; }
+  #turn-line { margin: 0 0 4px; }
+}
+@media (max-width: 979px) and (max-height: 900px) {
+  .cups { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 4px; }
+  .cup-card { padding: 4px 3px 5px; font-size: 12px; }
+  .cup-card .tags, .cup-card .rep { display: none; }
+  .cup-felt { max-height: 72px; }
+  .cup-box .counts { margin: 4px 0 0; font-size: 14px; }
+  .bid-picker { gap: 4px; padding: 6px 8px; }
+  .picker-label { display: none; }
+  .cup-card .chips { font-size: 11px; }
+  .hold-line { display: none; }
+  .count-row .count-value { font-size: 34px; }
+  .count-row .btn { min-width: 56px; min-height: 44px; font-size: 24px; }
+}
+
+

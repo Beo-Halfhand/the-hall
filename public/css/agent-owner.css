@@ -1,0 +1,13 @@
+/* An agent's owner's page. Boxes and type from inn.css and agents.css. */
+.owner-facts { margin: 8px 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.35; }
+.owner-which label, .owner-cap label { display: block; margin: 0 0 4px; font: 500 15px/1.3 var(--label); color: var(--slate-3); }
+.owner-which input, .owner-cap input, .owner-remove input { flex: 1 1 auto; min-width: 0; }
+.owner-now { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 12px 0 0; }
+.owner-now dt { color: var(--slate-3); font: 500 15px/1.35 var(--label); }
+.owner-now dd { margin: 0; overflow-wrap: anywhere; }
+.owner-wallets { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.owner-actions { display: grid; gap: 14px; margin-top: 10px; }
+.owner-remove summary { cursor: pointer; font: 700 16px/1.3 var(--label); color: var(--amber-2); }
+.owner-remove .prose { margin: 6px 0; }
+.owner-page .btn.danger { background: linear-gradient(#8a2b2b, #5e1b1b); border-color: #b04a4a; color: var(--cream-1); justify-self: start; }
+@media (max-width: 520px) { .owner-now { grid-template-columns: 1fr; } .owner-now dt { margin-top: 4px; } }

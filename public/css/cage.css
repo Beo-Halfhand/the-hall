@@ -1,0 +1,119 @@
+/* The cage, on every page that talks to a wallet: the picker, the tiles, the summary, the reasons, the cash row and the waiting window. */
+.wallet-list { display: grid; gap: 8px; margin: 12px 0 0; }
+.wallet-list:empty { display: none; }
+.wallet-choice { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; padding: 8px 12px; text-align: left; }
+.wallet-icon { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; }
+.wallet-initial { display: grid; place-items: center; background: var(--night-2); color: var(--cream-1); font: 700 18px/1 var(--label); }
+.wallet-text { min-width: 0; display: grid; gap: 1px; }
+.wallet-name { overflow-wrap: anywhere; font: 500 19px/1.2 var(--label); }
+.wallet-note { font: 400 14px/1.3 var(--label); opacity: .8; }
+.row-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.cage-facts { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 6px 12px; margin: 10px 0; }
+.cage-facts dt { font: 400 15px/1.6 var(--label); color: var(--slate-3); }
+.cage-facts dd { margin: 0; min-width: 0; line-height: 1.5; }
+.cage-facts code, .cage-note code { overflow-wrap: anywhere; font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cream-1); }
+.cage-num { font: 700 22px/1.2 var(--label); color: var(--amber-3); font-variant-numeric: lining-nums; }
+.cage-tag { display: inline-block; padding: 0 8px; border: 1px solid var(--night-3); border-radius: 10px; font: 400 13px/1.5 var(--label); color: var(--slate-3); }
+.cage-line { margin: 0 0 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font: 400 15px/1.4 var(--label); color: var(--slate-3); }
+.cage-line b { font: 700 22px/1.2 var(--label); color: var(--amber-3); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 6px 0 10px; }
+.tile { display: grid; gap: 3px; align-content: start; min-height: 86px; padding: 10px 12px; text-align: left; border-radius: 10px; }
+.tile .amount { font: 700 22px/1.1 var(--label); }
+.tile .sub { font: 400 14px/1.3 var(--label); opacity: .85; }
+.tile .why { margin: 2px 0 0; font-size: 13px; color: var(--amber-3); opacity: 1; }
+.custom { margin-top: 0; padding-top: 0; border-top: 0; }
+.summary { margin: 8px 0 12px; padding: 10px 12px; background: var(--ink); border: 2px solid var(--night-3); border-radius: 10px; }
+.summary .cage-h3 { margin: 0 0 4px; }
+.summary .cage-facts { margin: 4px 0 8px; }
+.summary label { margin-top: 6px; }
+.btn.big { min-height: 60px; }
+.why-wait { margin: -2px 0 6px; font: 400 15px/1.35 var(--body); color: var(--amber-3); } /* why the window waits: one line, under the title */
+.why-wait:empty { display: none; }
+.why { margin: 6px 0 0; color: var(--amber-3); font: 400 15px/1.35 var(--label); }
+.why:empty { display: none; }
+.status { margin: 10px 0 0; }
+.status:empty { display: none; }
+.cash-row { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--night-2); display: grid; gap: 6px; justify-items: start; }
+.cash-row .btn { min-height: 48px; }
+.cage-action { display: grid; gap: 8px; padding: 12px 0 0; margin-top: 12px; border-top: 1px solid var(--night-2); }
+.cage-note { margin: 0; color: var(--slate-3); font-size: 15px; line-height: 1.3; }
+.cage-note:empty { display: none; }
+.cage-h3 { margin: 4px 0 6px; font: 500 17px/1.2 var(--label); color: var(--amber-2); }
+.cage-log { margin: 10px 0 0; padding-left: 22px; display: grid; gap: 4px; font-size: 15px; }
+.cage-log code { overflow-wrap: anywhere; font: 13px/1.4 ui-monospace, Menlo, monospace; }
+.cage-log .failed { color: var(--wine-3); }
+.key-warning { margin: 0 0 8px; padding: 8px 10px; background: var(--ink); border: 2px solid var(--amber-0); border-radius: 8px; font-size: 15px; line-height: 1.35; }
+/* Scoped to the window (11-06, round 2): a seat badge in the lobby carries the status class `waiting` too, and this rule's transform slid every such badge half its width to the left. */
+.dialogue.waiting { grid-template-columns: 1fr; width: min(640px, calc(100vw - 20px)); bottom: auto; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--night-3), 0 14px 34px rgba(0, 0, 0, 0.6); }
+/* The page dims only while a plan is running, when its buttons really are off. Done or failed, the window stays to be read and the page behind it looks live, because it is. */
+.dialogue.waiting.running { box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--night-3), 0 0 0 100vmax rgba(10, 8, 22, 0.62); }
+#waiting-go { width: 100%; min-height: 56px; font-size: 20px; font-weight: 700; }
+.add-more-line { margin: -2px 0 10px; }
+.add-more { background: none; border: 0; box-shadow: none; padding: 0; color: var(--amber-2); font: 400 16px/1.3 var(--label); text-decoration: underline; text-shadow: none; cursor: pointer; }
+.add-more:hover { color: var(--amber-3); }
+.bar { height: 12px; background: var(--ink); border: 2px solid var(--night-3); border-radius: 8px; overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--oak-1), var(--amber-2)); transition: width .4s; }
+.stages { list-style: none; margin: 4px 0; padding: 0; display: grid; gap: 4px; }
+.stages li { display: grid; grid-template-columns: 24px 1fr; gap: 6px; align-items: start; font: 400 17px/1.35 var(--label); color: var(--slate-3); }
+.stages li::before { content: '○'; text-align: center; }
+.stages li.now { color: var(--amber-3); }
+.stages li.now::before { content: '◐'; animation: spin 1.2s steps(4, end) infinite; }
+.stages li.done { color: var(--cream-0); }
+.stages li.done::before { content: '✓'; color: var(--felt-2); font-weight: 700; }
+.stages li.failed { color: var(--wine-3); }
+.stages li.failed::before { content: '✗'; color: var(--wine-3); font-weight: 700; }
+.stages li small { display: block; grid-column: 2; min-width: 0; color: var(--amber-3); font-size: 14px; line-height: 1.35; overflow-wrap: break-word; } /* under the step's words, never in the 24px mark column (pass #4) */
+.stages li.failed small { color: var(--wine-3); }
+.plain-log { margin: 0; color: var(--cream-1); font: 400 15px/1.35 var(--body); }
+.plain-log:empty { display: none; }
+.result-cards { display: grid; gap: 8px; }
+.result-cards:empty { display: none; }
+.result-card { padding: 10px 12px; background: var(--ink); border: 1px solid var(--oak-1); border-left: 4px solid var(--amber-2); display: grid; gap: 2px; }
+.result-card p { margin: 0; }
+.result-title { font: 500 14px/1.3 var(--label); color: var(--slate-3); letter-spacing: .04em; text-transform: uppercase; }
+.result-head { font: 500 22px/1.25 var(--label); color: var(--cream-0); }
+.result-typical { font: 400 14px/1.3 var(--body); color: var(--amber-3); }
+.result-says { margin-top: 4px !important; font: 400 15px/1.35 var(--body); color: var(--cream-1); }
+.result-link { margin-top: 4px; font: 400 15px/1.3 var(--body); color: var(--amber-2); justify-self: start; }
+.small-log { margin: 0; font-size: 13px; color: var(--slate-3); max-height: 8em; overflow-y: auto; }
+.small-log:empty { display: none; }
+.trouble p { margin: 0 0 6px; }
+.trouble-steps { margin: 2px 0 8px; padding-left: 1.4em; display: grid; gap: 4px; }
+.trouble-steps li { padding-left: 2px; }
+.trouble b { color: var(--amber-2); font-weight: 500; }
+.raw { margin: 4px 0 0; padding: 6px 8px; max-height: 7em; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--ink); border: 1px solid var(--night-3); border-radius: 6px; font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--slate-3); }
+@keyframes spin { 0% { content: '◐'; } 25% { content: '◓'; } 50% { content: '◑'; } 75% { content: '◒'; } }
+@media (max-width: 480px) { .cage-facts { grid-template-columns: minmax(0, 1fr); gap: 0 0; } .cage-facts dt { margin-top: 4px; } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Cash out how much? (11-07): All <n>, or an amount typed, under the Cash out button */
+.cash-ask { display: grid; gap: 6px; margin: 4px 0 2px; padding: 8px 10px; background: var(--ink); border: 2px solid var(--night-3); border-radius: 8px; justify-self: stretch; }
+.cash-ask[hidden] { display: none; }
+.cash-ask-title { margin: 0; font: 700 16px/1.2 var(--label); color: var(--amber-2); }
+.cash-ask-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.cash-ask-row input { width: 9em; flex: 0 1 auto; min-height: 40px; }
+.cash-ask-or { color: var(--slate-3); font: 400 15px/1 var(--label); }
+.cash-row.leads { margin-top: 0; padding-top: 0; border-top: 0; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--night-2); } /* the door page once the cage holds something: Cash out first */
+.cash-row.leads #cash-out { min-height: 56px; font-size: 20px; font-weight: 700; }
+.wallet-tip { margin: 2px 0 0; color: var(--slate-3); font: 400 15px/1.3 var(--label); } /* the tester's note under the wallets */
+.cage-facts code.one-line { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; } /* a long address on one line, the whole one in its title */
+
+/* No DUST yet (the 11-08 pass #3, #7): the amounts wait, and the page says why and what to do. The wallet card says ready or not. */
+.dust-wall { margin: 8px 0 10px; padding: 10px 12px; border: 2px solid var(--amber-1); border-radius: 8px; background: rgba(249, 194, 43, 0.08); display: grid; gap: 8px; justify-items: start; }
+.cage-trouble { margin: 8px 0 10px; padding: 10px 12px; border: 2px solid var(--amber-1); border-radius: 8px; background: rgba(249, 194, 43, 0.08); display: grid; gap: 8px; justify-items: start; }
+.cage-trouble-text { margin: 0; font: 500 16px/1.4 var(--label); color: var(--cream-1); overflow-wrap: break-word; }
+.cage-trouble-raw { font: 400 12px/1.4 var(--label); color: var(--cream-3, #a89f8a); overflow-wrap: anywhere; }
+.cage-trouble[hidden], .connected-note[hidden] { display: none; }
+.connected-note { font-weight: 600; }
+.dust-wall-text { margin: 0; font: 500 16px/1.4 var(--label); color: var(--cream-1); overflow-wrap: break-word; }
+.dust-badge { display: inline-block; padding: 1px 8px; border-radius: 6px; font: 700 13px/1.4 var(--label); white-space: nowrap; }
+.dust-badge.ok { background: #1f5a4a; color: #bff3e2; border: 1px solid #2a7d68; }
+.dust-badge.no { background: rgba(249, 194, 43, 0.12); color: var(--amber-2); border: 1px solid var(--amber-1); }
+
+/* A seat or a move with nothing to approve waits in a small banner at the top (the 11-08 pass #17): the table stays in view, nothing dims. */
+.waiting-banner { display: none; }
+.dialogue.waiting.compact { top: 8px; bottom: auto; transform: translateX(-50%); width: min(560px, calc(100vw - 16px)); padding: 6px 10px; }
+.dialogue.waiting.compact, .dialogue.waiting.compact.running { box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--night-3), 0 6px 18px rgba(0, 0, 0, 0.5); }
+.dialogue.waiting.compact .waiting-body { display: none; }
+.dialogue.waiting.compact .waiting-banner { display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; font: 500 15px/1.3 var(--label); color: var(--cream-1); }
+.waiting-banner-text { flex: 1 1 12em; min-width: 0; overflow-wrap: break-word; }
+.waiting-banner-clock { font-variant-numeric: tabular-nums; color: var(--amber-2); font-weight: 700; }
+.dialogue.waiting.compact.banner-done .waiting-banner-text { color: #bff3e2; }

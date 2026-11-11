@@ -1,0 +1,28 @@
+{
+  "colours": 96,
+  "room": {
+    "file": "room.png",
+    "w": 576,
+    "h": 484
+  },
+  "hero": {
+    "file": "hero.png",
+    "w": 288,
+    "h": 432
+  },
+  "cup": {
+    "file": "cup.png",
+    "w": 137,
+    "h": 137
+  },
+  "dice": {
+    "file": "dice.png",
+    "size": 24,
+    "svg": "dice.svg"
+  },
+  "cupDrawn": {
+    "file": "cup-drawn.png",
+    "w": 44,
+    "h": 52
+  }
+}

@@ -1,0 +1,61 @@
+/* The cage page's own layout: the path, the steps and the folds. Shared cage styles live in cage.css. */
+/* The Cage: one path down the page. Uses the Hall's boxes, buttons, inputs and dialogue from inn.css. */
+.cage-page { min-height: 100vh; }
+.cage-head { max-width: 720px; margin: 0 auto; padding: 22px 12px 2px; }
+.cage-head h1 { margin: 0; font: 700 30px/1.15 var(--title); color: var(--amber-2); letter-spacing: 1px; overflow-wrap: anywhere; }
+.cage-sub { margin: 4px 0 0; color: var(--slate-3); }
+.cage-sub b { color: var(--amber-3); font-weight: 500; }
+.cage-stop { max-width: 696px; margin: 12px auto 0; padding: 12px 14px; background: var(--ink); border: 3px solid var(--wine-3); border-radius: 8px; color: var(--amber-3); font-size: 18px; }
+.cage-path { max-width: 720px; margin: 0 auto 40px; display: grid; gap: 0; }
+.cage-path .box { margin: 10px 12px; }
+
+/* the steps */
+.step { position: relative; }
+.step-no { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: 6px; border-radius: 50%; background: var(--night-2); color: var(--cream-1); font: 700 16px/1 var(--label); vertical-align: -5px; }
+.step.now .step-no { background: var(--amber-1); color: #1c1006; }
+.step.done .step-no { background: var(--felt-2); }
+.step.done .step-no::before { content: '✓'; }
+.step.done .step-no { font-size: 0; }
+.step.done .step-no::before { font-size: 16px; }
+.step.later { opacity: .72; }
+.step.done .box-title, .step.later .box-title { color: var(--slate-3); }
+.step.now { box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--amber-0), 0 6px 0 2px rgba(0, 0, 0, 0.45); }
+
+.wallet-choice[aria-busy='true']::after { content: none; }
+.wallet-note.waiting::after { content: '…'; display: inline-block; width: 1.1em; text-align: left; animation: dots 1.2s steps(4, end) infinite; }
+.wallet-line { margin: 10px 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; font: 500 18px/1.2 var(--label); }
+.quiet-inline { color: var(--slate-3); font-size: 15px; }
+
+
+/* the tiles */
+.tile[aria-checked='true'] { background: var(--grain), linear-gradient(180deg, var(--oak-2), var(--oak-1) 55%, #ad7220); color: #1c1006; border-color: var(--oak-0); text-shadow: 0 1px 0 rgba(255, 240, 200, 0.45); }
+.tile[aria-checked='true'] .why { color: #5a2a00; }
+.tile[disabled] .amount { text-decoration: line-through; }
+#bring-to-table { margin-top: 10px; }
+.back-line { margin: 4px 12px 10px; text-align: center; }
+
+/* the folds under the path */
+.fold summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.fold summary::-webkit-details-marker { display: none; }
+.fold summary .box-title { margin: 0; }
+.fold summary .box-title::before { content: '▸ '; color: var(--slate-3); }
+.fold[open] summary .box-title::before { content: '▾ '; }
+.fold-note { color: var(--slate-3); font: 400 15px/1.3 var(--label); }
+.fold-note.bad { color: var(--wine-3); }
+.cage-checks { list-style: none; margin: 10px 0 0; padding: 0; }
+.cage-checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 4px; padding: 3px 0; line-height: 1.3; }
+.cage-checks li > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.cage-checks .ok::before { content: '✓'; color: var(--felt-2); font-weight: 700; }
+.cage-checks .bad::before { content: '✗'; color: var(--wine-3); font-weight: 700; }
+.cage-checks .wait::before { content: '…'; color: var(--slate-3); }
+.cage-checks small { display: block; color: var(--slate-3); font-size: 14px; overflow-wrap: anywhere; }
+.cage-found { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.cage-found li { display: grid; gap: 6px; }
+.cage-progress { margin: 10px 0 8px; color: var(--amber-3); }
+.cage-progress:empty { display: none; }
+#indexer-form { display: grid; gap: 8px; margin-top: 10px; }
+
+/* the waiting window */
+.waiting-body { display: grid; gap: 8px; }
+.dialogue.waiting.failed .box-title { color: var(--wine-3); }
+

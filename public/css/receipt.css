@@ -1,0 +1,41 @@
+/* A round's public receipt. Uses the Hall's fonts and colours from inn.css. */
+.receipt-page { min-height: 100vh; overflow-y: auto; }
+.receipt-wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+.receipt-kicker { font: 500 14px/1.3 var(--label); color: var(--slate-3); margin: 0 0 8px; }
+.receipt-kicker a { color: inherit; }
+.receipt-wrap h1 { font: 700 30px/1.15 var(--title, serif); color: var(--amber-3); margin: 0 0 8px; }
+.rc-box { background: var(--night-1); border: 2px solid var(--night-3); border-radius: 6px; padding: 12px 14px; margin: 14px 0; }
+.rc-box h2 { font: 700 17px/1.2 var(--label); color: var(--amber-2); margin: 0 0 8px; }
+.rc-line { margin: 4px 0; }
+.rc-hash { font: 13px/1.45 ui-monospace, Menlo, monospace; word-break: break-all; }
+.rc-table { width: 100%; border-collapse: collapse; }
+.rc-table td, .rc-table th { text-align: left; padding: 4px 8px 4px 0; border-top: 1px solid var(--night-3); vertical-align: top; }
+.rc-table th { font: 500 14px/1.2 var(--label); color: var(--slate-3); border-top: 0; }
+.rc-num { font-variant-numeric: tabular-nums; }
+.rc-check { list-style: none; margin: 8px 0 0; padding: 0; }
+.rc-check li { padding: 5px 0 5px 26px; position: relative; border-top: 1px solid var(--night-3); }
+.rc-check li::before { position: absolute; left: 2px; font-weight: 700; }
+.rc-check li.pass::before { content: '✓'; color: #7fdcc4; }
+.rc-check li.fail::before { content: '✗'; color: #ff8f7a; }
+.rc-check li.word::before { content: '·'; color: var(--amber-2); }
+.rc-note { font-size: 15px; color: var(--slate-3); }
+#check-now { margin-top: 4px; }
+
+/* ---------- the receipt window over a table (receipt-window.js), and the button that opens it ---------- */
+.receipt-open { margin-left: 6px; vertical-align: middle; }
+.sp-seal { font: 500 12px/1.3 ui-monospace, Menlo, monospace; color: var(--cream-1); word-break: break-all; }
+.sp-seal-note { display: block; color: var(--slate-3); font-size: 11px; }
+.receipt-window { width: min(760px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; color: var(--cream-1); background: linear-gradient(180deg, var(--night-1), var(--night-0)); border: 4px solid var(--cream-0); border-radius: 2px; box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--night-3), 0 10px 0 2px rgba(0, 0, 0, 0.5); overflow: auto; }
+.receipt-window::backdrop { background: rgba(10, 8, 22, 0.72); }
+.receipt-window .rw-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px 4px; }
+.receipt-window .rw-head h2 { margin: 0; font: 700 20px/1.2 var(--title, serif); color: var(--amber-3); }
+.receipt-window .rw-sub { margin: 0 16px 8px; color: var(--slate-3); font-size: 14px; }
+.receipt-window .rw-body { padding: 0 16px; }
+.receipt-window .rw-body .rc-box { margin: 10px 0; }
+.receipt-window .rw-foot { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; padding: 10px 16px 16px; }
+.rc-deck { font: 500 12px/1.5 ui-monospace, Menlo, monospace; word-break: break-word; }
+@media (max-width: 599px) {
+  .receipt-window { width: calc(100vw - 16px); max-height: calc(100vh - 16px); }
+  .receipt-window .rw-head { padding: 10px 12px 2px; }
+  .receipt-window .rw-body { padding: 0 12px; }
+}

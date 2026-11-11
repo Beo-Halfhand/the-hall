@@ -1,0 +1,42 @@
+{
+  "name": "sealed-hand-wallet-app",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "The cage's contract code for the wallet page: runs the circuits in the browser, and Lace proves, balances and submits. Preprod only. Ledger 9 (11-09): Midnight.js 5, DApp Connector API 4.1.0; cage4 and dice-proof stay ledger 8 contracts on their deployed 0.31.1 builds (runtime 0.16.0).",
+  "scripts": {
+    "build": "node scripts/copy-contract.mjs && vite build"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.16.0",
+    "@midnight-ntwrk/midnight-js-contracts": "5.0.0",
+    "@midnight-ntwrk/midnight-js-dapp-connector-proof-provider": "5.0.0",
+    "@midnight-ntwrk/midnight-js-fetch-zk-config-provider": "5.0.0",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "5.0.0",
+    "@midnight-ntwrk/midnight-js-protocol": "5.0.0",
+    "@midnight-ntwrk/midnight-js-types": "5.0.0",
+    "@midnight-ntwrk/midnight-js-utils": "5.0.0",
+    "@midnightntwrk/dapp-connector-api": "4.1.0",
+    "@midnightntwrk/wallet-sdk-address-format": "4.0.0",
+    "buffer": "6.0.3",
+    "events": "3.3.0"
+  },
+  "devDependencies": {
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "5.0.0",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "5.0.0",
+    "@midnight-ntwrk/testkit-js": "5.0.0",
+    "@midnightntwrk/wallet-sdk": "2.0.0",
+    "rxjs": "7.8.2",
+    "vite": "7.3.7",
+    "vite-plugin-wasm": "3.6.0",
+    "ws": "8.21.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@midnightntwrk/ledger-v9": "1.0.0",
+      "@midnightntwrk/onchain-runtime-v4": "4.0.0",
+      "@midnight-ntwrk/platform-js": "3.0.0",
+      "@midnight-ntwrk/onchain-runtime-v3": "3.1.2"
+    }
+  }
+}

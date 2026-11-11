@@ -1,0 +1,187 @@
+/*
+ * Cup & Claim as a frontier saloon at midnight (11-05 redesign, preview). The layout is table3.css's, the seat cards are
+ * seat-cards.css's; this is the room's light and colour, all from the Resurrect 64 roles in tokens.css: plum and red-brown
+ * wood, one warm lamp, Midnight City's purple and teal through the window, brass for Bid, blood red for Call liar, ivory
+ * dice, dark leather cups.
+ */
+
+/* ---------- CENTRE: the saloon, and the bid to beat, big ---------- */
+
+/* The table art (11-06), as it was drawn: drawn as it is, never stretched (js keeps its aspect), with no wash, no vignette,
+   no blur over it. A wide screen crops it to the lamp, window and table; a phone to a band of the table (Phase A). */
+.saloon .dice-scene { background: url(/art/dice/table-room-1152.webp) 0 0 / 100% 100% no-repeat; image-rendering: auto; }
+.saloon .zone-mid .scene-wrap { width: calc(var(--scene-w) * var(--s) * 1px); max-width: 100%; margin: 0 auto; }
+.saloon .zone-mid .scene-wrap::after { content: none; }
+.saloon .dice-scene .pot-on-felt { top: 60.5%; bottom: auto; transform: translate(-50%, -60%); } /* the pot in the lamp's pool, mid-table */
+.saloon .dice-scene .sprite-pile { width: calc(var(--pw) * var(--s) * 1.7px); height: calc(var(--ph) * var(--s) * 1.7px); image-rendering: auto; }
+.saloon .dice-scene .pot-on-felt .pot-amount { display: none; } /* the number is in the panel and on the board, never on the table */
+
+/* Each seat's cup on the table top, in seat order (js places them, in the picture's own pixels times --s): the Grok cups
+   (scripts/art/cups-grok.py), lit by the lamp, the lit side turned to it, brighter in the pool and dimmer at the rim, a
+   shadow falling away from it. A cup in play is turned down over its dice; a shown cup stands up beside its dice, and so
+   does yours, for you. Whose turn has a warm glow under it; a folded cup is dim. */
+.saloon .table-cup { position: absolute; z-index: 3; left: calc(var(--cx) * 1%); top: calc(var(--cy) * 1%); width: 0; height: 0; pointer-events: none; --u: calc(var(--s) * var(--depth) * 1px); }
+.saloon .table-cup .cup-art { position: absolute; left: 0; bottom: calc(-4 * var(--u)); width: calc(var(--cw) * 1px); height: calc(var(--ch) * 1px); /* whole pixels (round 3) */ transform: translateX(-50%) scaleX(var(--flip)); transform-origin: 50% 100%; background: url(/art/dice/cup-down-s.webp) 50% 100% / contain no-repeat; filter: brightness(max(var(--lit), 0.86)); } /* the small sharpened copy; the dusk at the rim never below 0.86, so the leather keeps its grain (round 3) */
+.saloon .table-cup .cup-shadow { position: absolute; left: 0; top: 0; width: calc(122 * var(--u)); height: calc(36 * var(--u)); transform: translate(calc(-50% + var(--shx) * var(--u)), calc(-55% + var(--shy) * var(--u))); border-radius: 50%; background: radial-gradient(closest-side, rgba(12, 6, 3, 0.72), rgba(12, 6, 3, 0.4) 55%, transparent); }
+.saloon .table-cup.turn::before { content: ''; position: absolute; left: 0; top: 0; width: calc(170 * var(--u)); height: calc(56 * var(--u)); transform: translate(-50%, -55%); border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 226, 140, 0.6), rgba(249, 194, 43, 0.28) 60%, transparent); }
+.saloon .table-cup.folded .cup-art { filter: brightness(calc(var(--lit) * 0.55)) saturate(0.6); }
+/* lifted: the cup stood up, mouth open, beside the dice it covered (on the side away from the table's middle) */
+.saloon .table-cup.lifted .cup-art { bottom: calc(-2 * var(--u)); background-image: url(/art/dice/cup-up-s.webp); transform: translateX(calc(-50% + var(--side) * 136 * var(--u))) scaleX(var(--flip)); }
+.saloon .table-cup.lifted .cup-shadow { transform: translate(calc(-50% + var(--side) * 136 * var(--u) + var(--shx) * var(--u)), calc(-55% + var(--shy) * var(--u))); width: calc(84 * var(--u)); }
+.saloon .table-cup .cup-dice { position: absolute; left: 0; top: calc(-14 * var(--u)); transform: translateX(-50%); display: flex; gap: calc(3 * var(--u)); filter: brightness(var(--lit)); }
+.saloon .table-cup .cup-dice .die, .saloon .table-cup .cup-dice .die.small { width: calc(var(--dpx) * 1px); height: calc(var(--dpx) * 1px); box-shadow: none; filter: drop-shadow(0 calc(4 * var(--u)) calc(2 * var(--u)) rgba(12, 6, 3, 0.7)); }
+
+/* The others at the table, as in Sealed Hand: each seat's character (the same sprites, two frames) standing behind the far
+   rim in seat order, the table hiding them from the waist down (js clips each along the rim's line), lit by the lamp. */
+.saloon .table-figure { z-index: 2; pointer-events: none; image-rendering: pixelated; filter: brightness(var(--lit)) sepia(0.12); }
+.saloon .table-figure.folded { filter: grayscale(0.85) brightness(calc(var(--lit) * 0.55)); animation-play-state: paused; }
+.saloon .table-figure.away { opacity: 0.55; animation-play-state: paused; }
+
+/* The official Midnight symbol on the tapestry's cloth: the brand file as it is, centred, ~40% of the banner, at a lower
+   opacity so it reads as pale thread over the cloth (and the tapestry's own art shows through it). Never clipped: when the
+   frame would cut it, it isn't drawn (js sets .mark-cut). */
+.saloon .tapestry-mark { position: absolute; z-index: 1; left: calc(var(--mx) * 1%); top: calc(var(--my) * 1%); width: calc(var(--mw) * 1%); height: auto; aspect-ratio: 1; transform: translate(-50%, -50%); opacity: 0.3; transition: opacity 0.2s ease, filter 0.2s ease; pointer-events: none; image-rendering: auto; }
+/* silver-violet like the Hall's marks, and brighter while the pointer is over the room (11-08 pass #26) */
+#scene:hover .tapestry-mark, #scene:focus-within .tapestry-mark { opacity: 0.9; filter: var(--mark-glow); }
+#scene:hover .tapestry-mark::before, #scene:focus-within .tapestry-mark::before { background: #d6cfff; }
+@media (prefers-reduced-motion: reduce) { .saloon .tapestry-mark { transition: none; } }
+.mark-cut .saloon .tapestry-mark, .mark-cut .tapestry-mark { display: none; }
+
+/* the reveal, under the room after a call: what decided it, then each cup's dice, big enough to count on a phone */
+.saloon .reveal { margin: 6px 0 0; padding: 8px 10px 10px; background: linear-gradient(180deg, var(--r64-oxblood), var(--r64-ink)); border: 2px solid var(--r64-brass-0); border-radius: 6px; box-shadow: 0 4px 0 var(--r64-ink); }
+.saloon .reveal[hidden] { display: none; }
+.reveal-line { margin: 0 0 8px; font: 700 21px/1.2 var(--label); color: var(--r64-white); text-align: center; text-shadow: 0 2px 0 var(--r64-ink); }
+.reveal-line.holds { color: var(--r64-brass-3); }
+.reveal-line.falls { color: #ff9a8a; }
+.reveal-cups { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 14px; }
+.reveal-cup { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.reveal-who { display: inline-flex; align-items: center; gap: 6px; min-width: 6.5em; max-width: 9em; font: 500 15px/1.2 var(--label); color: var(--r64-bone); }
+.reveal-who .face { width: 22px; height: 22px; flex: none; }
+.reveal-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reveal-dice { display: inline-flex; gap: 4px; }
+.reveal-dice .die { --die: 34; }
+.reveal-dice .die.wild { box-shadow: none; }
+.reveal-dice .die.miss { filter: brightness(0.5) saturate(0.5); }
+.reveal-count { font: 500 14px/1.25 var(--label); color: var(--r64-dust-hi); }
+
+/* the bid board: under the room, so nothing sits on the table art */
+.saloon .bid-board {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px 14px;
+  margin: 6px 0 0;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, var(--r64-oxblood), var(--r64-ink));
+  border: 2px solid var(--r64-brass-0);
+  border-radius: 6px;
+  box-shadow: 0 4px 0 var(--r64-ink);
+  color: var(--r64-brass-3);
+  text-align: center;
+}
+.saloon .bid-board[hidden] { display: none; }
+.saloon .bid-board .big-bid { white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; font: 700 30px/1 var(--title); color: var(--r64-white); text-shadow: 0 3px 0 var(--r64-ink); }
+.saloon .bid-board .big-bid .die { width: 30px; height: 30px; }
+.saloon .bid-board small { font: 500 15px/1.2 var(--label); color: var(--r64-brass-3); text-transform: lowercase; }
+
+/* ---------- TOP: Cup & Claim's own rows on the shared seat card: the cup, the dice count, the last bid, the answer ---------- */
+
+.saloon .badges .cup-card { grid-template-areas: 'face name chips' 'face cup bid' 'note note note' 'answer answer answer' 'tags tags tags'; }
+.saloon .cup-card .cup-icon { grid-area: cup; justify-self: start; width: 24px; height: 24px; margin: 0; }
+.saloon .cup-card .cup-icon.lifted { background-image: url(/art/dice/cup-up-s.webp); }
+.saloon .cup-card .last-bid { grid-area: bid; justify-self: end; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 8px; background: var(--r64-ink); color: var(--r64-brass-3); font-size: 14px; }
+.saloon .cup-card .last-bid.none { background: none; color: var(--r64-dust-hi); font-size: 12px; }
+.saloon .cup-card .cup-answer { grid-area: answer; }
+.saloon .cup-card .cup-answer:empty { display: none; }
+.saloon .cup-card .owed { display: none; }
+
+/* ---------- LEFT: the bid ladder (the shared .ladder in table3.css) and the one rule ---------- */
+
+.wild-note { margin: 6px 0 0; padding: 6px 8px; border-radius: 4px; background: rgba(14, 175, 155, 0.14); border: 1px solid var(--r64-teal-0); color: var(--r64-bone); font: 500 13px/1.3 var(--label); }
+.wild-note b { color: var(--r64-teal-2); }
+.sp-dl { margin: 0; display: grid; }
+.sp-dl > div { display: grid; gap: 1px; padding: 6px 0; border-top: 1px solid rgba(127, 112, 138, 0.35); }
+.sp-dl dt { font: 500 12px/1.2 var(--label); color: var(--r64-dust-hi); letter-spacing: 0.4px; text-transform: uppercase; }
+.sp-dl dd { margin: 0; font: 500 17px/1.2 var(--label); color: var(--r64-white); }
+.sp-dl .pot b { color: var(--r64-brass-2); font-size: 19px; }
+.saloon .status-panel .pot-limit { font-size: 12px; color: var(--r64-dust-hi); }
+@media (max-width: 979px) { .saloon .status-panel .sp-dl { display: none; } }
+
+/* the old to-beat line stays for what it says, small: the big bid is in the middle of the table now */
+.saloon #to-beat { margin: 0 0 6px; padding: 6px 10px; font: 500 14px/1.3 var(--label); }
+.saloon #to-beat .die { width: 18px; height: 18px; vertical-align: -3px; }
+.saloon #to-beat .bid-hint { font-size: 12px; }
+
+/* ---------- CENTRE, under the room: your dice, ivory under a lifted leather cup ---------- */
+
+.saloon .cup-box .cup-stage { max-height: 132px; }
+.saloon .cup-box { padding: 8px 12px; background: radial-gradient(ellipse 70% 110% at 50% 100%, rgba(251, 185, 84, 0.14), transparent 70%), linear-gradient(180deg, var(--night-1), var(--night-0)); border-color: var(--r64-dust-hi); }
+.saloon .cup-box .die { filter: drop-shadow(0 3px 0 rgba(46, 34, 47, 0.75)) drop-shadow(0 6px 4px rgba(0, 0, 0, 0.35)); }
+.saloon .cup-sprite { filter: sepia(0.5) hue-rotate(-25deg) saturate(0.9) brightness(0.65); } /* dark leather */
+.hold-now { margin: 6px 0 0; font: 700 17px/1.2 var(--label); color: var(--r64-brass-2); text-align: center; }
+.hold-now[hidden] { display: none; }
+/* your dice sit on the saloon's own wood under the lamp, not on green felt */
+.saloon .cup-felt, .saloon .cup-felt.painted { max-width: 460px; min-height: calc(var(--die) * 1.9px); padding: calc(var(--die) * 0.35px) 8px; background: radial-gradient(ellipse 60% 70% at 50% 35%, rgba(251, 185, 84, 0.3), transparent 65%), repeating-linear-gradient(180deg, var(--wood-1) 0 9px, var(--wood-0) 9px 10px), var(--wood-1); border: 3px solid var(--r64-ink); box-shadow: inset 0 0 0 2px var(--wood-0), inset 0 0 22px rgba(10, 8, 22, 0.75); image-rendering: pixelated; }
+.saloon .cup-felt.painted::before { display: none; }
+
+/* ---------- RIGHT: the picker and the row ---------- */
+
+.saloon #action-box { background: linear-gradient(180deg, var(--night-1), var(--night-0)); }
+.saloon .count-row .btn, .saloon .face-btn { box-shadow: 0 3px 0 var(--r64-ink); }
+.saloon .face-btn[aria-pressed='true'] { outline: 3px solid var(--r64-brass-2); outline-offset: 1px; }
+.saloon .choices { grid-template-columns: 1fr; } /* the two answers stack in the move column: each a full line, never two slivers of small type (review shots, 11-07) */
+@media (min-width: 560px) and (max-width: 979px) { .saloon .choices { grid-template-columns: 1fr 1fr; } }
+
+/* Bid, Call liar, Fold: Bid widest, Fold a plain word (its "sit this round out" is the ghost's reason, never broken mid-word: 11-07) */
+.move-row.dice-moves { grid-template-columns: 1.5fr 1.5fr 1fr; }
+.dice-moves .btn.move { min-height: 60px; font: 700 17px/1.1 var(--label); }
+.dice-moves .move.bid { background: linear-gradient(180deg, var(--r64-brass-3), var(--r64-brass-1)); color: var(--r64-ink); text-shadow: 0 1px 0 rgba(255, 240, 200, 0.55); }
+.dice-moves .move.liar { background: linear-gradient(180deg, var(--r64-blood-1), var(--r64-blood-0)); color: var(--r64-white); letter-spacing: 0.5px; }
+.dice-moves .move.liar small { display: block; font: 500 11px/1.15 var(--label); }
+.dice-moves .move.fold { background: linear-gradient(180deg, var(--r64-dust-hi), var(--r64-dust)); font-size: 15px; }
+.dice-moves .move.fold small { display: none; }
+.dice-moves .btn.move.ghost, .dice-moves .btn.move[disabled] { background: var(--r64-shade); color: var(--r64-dust-hi); text-shadow: none; box-shadow: 0 2px 0 var(--r64-ink); }
+
+@media (max-width: 979px) {
+  .saloon .bid-board .big-bid { font-size: 22px; }
+  .saloon .bid-board .big-bid .die { width: 22px; height: 22px; }
+  .saloon .bid-board small { font-size: 12px; }
+  /* as Sealed Hand on a phone: each seat's face and stack across the top, the last bid under it */
+  .saloon .badges .cup-card { grid-template-areas: 'face' 'chips' 'bid' 'note'; }
+  .saloon .cup-card .cup-icon, .saloon .cup-card .cup-answer { display: none; }
+  .saloon .cup-card .last-bid { justify-self: center; font-size: 12px; padding: 1px 4px; }
+  .saloon .cup-card .last-bid.none { display: none; }
+  .move-row.dice-moves { grid-template-columns: 1.4fr 1.4fr 1fr; }
+}
+
+/* A laptop-height screen: one-line seat cards, and the picker tightened, so the cup and Bid stay above the fold. */
+@media (min-width: 980px) and (max-height: 959px) {
+  .saloon .badges .cup-card { padding: 5px 8px; }
+  .saloon .cup-card .tags, .saloon .cup-card .cup-answer:empty { display: none; }
+  .saloon .cup-box .cup-felt, .saloon .cup-box .cup-felt.painted { min-height: calc(var(--die) * 1.6px); }
+  .saloon #action-box > .box-title, .saloon #action-box #turn-line { display: none; } /* the badge, the panel and the big bid say whose turn it is */
+  .saloon #actions .chips-title { margin: 0 0 4px; }
+  .saloon #action-box #to-beat { display: none; } /* the same bid is big in the middle of the table */
+  .saloon #raise-beside { padding: 4px 8px; }
+  .saloon #raise-beside .raise-title { display: inline; margin: 0 8px 0 0; }
+  .saloon #raise-beside .raise-row { display: inline-flex; gap: 6px; }
+  .saloon #raise-beside input { width: 4.5em; min-height: 36px; }
+  .saloon #raise-beside .btn.small { min-height: 36px; }
+  .saloon .bid-picker { padding: 6px 8px; }
+  .saloon .bid-picker .picker-label { margin: 2px 0; }
+}
+
+/* The saloon's panels are the Hall's own midnight navy, as the waiting windows are (11-06, round 2). Wood stays on the buttons and on the table. */
+.saloon .box { border-color: var(--cream-0); box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--night-3), 0 6px 0 2px rgba(0, 0, 0, 0.45); }
+.saloon .status-panel .sp-head.status-bar { background: linear-gradient(180deg, var(--night-2), var(--night-1)); border-color: var(--amber-0); }
+.saloon .zone-mid .scene-wrap { background: var(--ink); }
+.saloon .wild-note { background: rgba(20, 16, 44, 0.6); }
+
+/* Your own cup on the table (11-06, round 2): it stands where it is, and your dice sit right in front of it, half again as big as the
+   others' shown dice, so they read from the chair. The front cup is at the near rim (row 1258 of 1728); the dice run to row 1325, inside the laptop crop. */
+.saloon .table-cup.mine.lifted .cup-art { transform: translateX(-50%) scaleX(var(--flip)); }
+.saloon .table-cup.mine.lifted .cup-shadow { transform: translate(calc(-50% + var(--shx) * var(--u)), calc(-55% + var(--shy) * var(--u))); }
+.saloon .table-cup.mine .cup-dice { top: calc(8 * var(--u)); gap: calc(4 * var(--u)); z-index: 4; filter: brightness(1.04); } /* yours are never dimmed by the rim's dusk: they're for reading (round 3) */
+.saloon .table-cup.mine .cup-dice .die, .saloon .table-cup.mine .cup-dice .die.small { width: calc(var(--dpx) * 1px); height: calc(var(--dpx) * 1px); } /* 51 of the picture's pixels to the others' 34, whole */
+.bid-scope { margin: 2px 0 8px; font-size: 16px; line-height: 1.4; color: var(--parchment-1, #f4ead2); }

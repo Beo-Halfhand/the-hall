@@ -1,0 +1,183 @@
+{
+  "colours": 96,
+  "sprites": {
+    "halfhand": {
+      "file": "seat-halfhand.png",
+      "w": 111,
+      "h": 215,
+      "face": [
+        35,
+        1,
+        43
+      ]
+    },
+    "tally": {
+      "file": "seat-tally.png",
+      "w": 71,
+      "h": 214,
+      "face": [
+        14,
+        1,
+        43
+      ]
+    },
+    "brannock": {
+      "file": "seat-brannock.png",
+      "w": 141,
+      "h": 214,
+      "face": [
+        34,
+        1,
+        43
+      ]
+    },
+    "oldwick": {
+      "file": "seat-oldwick.png",
+      "w": 85,
+      "h": 203,
+      "face": [
+        24,
+        1,
+        40
+      ]
+    },
+    "adventurer": {
+      "file": "seat-adventurer.png",
+      "w": 104,
+      "h": 204,
+      "face": [
+        23,
+        1,
+        41
+      ]
+    },
+    "dwarf": {
+      "file": "seat-dwarf.png",
+      "w": 111,
+      "h": 189,
+      "face": [
+        40,
+        1,
+        38
+      ]
+    },
+    "ranger": {
+      "file": "seat-ranger.png",
+      "w": 114,
+      "h": 211,
+      "face": [
+        32,
+        1,
+        42
+      ]
+    },
+    "pirate": {
+      "file": "seat-pirate.png",
+      "w": 101,
+      "h": 216,
+      "face": [
+        36,
+        1,
+        43
+      ]
+    },
+    "clockwork": {
+      "file": "seat-clockwork.png",
+      "w": 84,
+      "h": 207,
+      "face": [
+        19,
+        1,
+        41
+      ]
+    },
+    "mage": {
+      "file": "seat-mage.png",
+      "w": 108,
+      "h": 203,
+      "face": [
+        41,
+        1,
+        40
+      ]
+    },
+    "halfling": {
+      "file": "seat-halfling.png",
+      "w": 101,
+      "h": 203,
+      "face": [
+        21,
+        1,
+        40
+      ]
+    },
+    "rogue": {
+      "file": "seat-rogue.png",
+      "w": 98,
+      "h": 218,
+      "face": [
+        19,
+        1,
+        43
+      ]
+    },
+    "knight": {
+      "file": "seat-knight.png",
+      "w": 97,
+      "h": 213,
+      "face": [
+        22,
+        1,
+        42
+      ]
+    }
+  },
+  "doorman": {
+    "file": "doorman.png",
+    "w": 48,
+    "h": 120
+  },
+  "portrait": {
+    "file": "portrait.png",
+    "size": 72
+  },
+  "rooms": {
+    "v1": {
+      "file": "room-v1.png",
+      "w": 576,
+      "h": 864
+    },
+    "v2": {
+      "file": "room-v2.png",
+      "w": 576,
+      "h": 864
+    }
+  },
+  "table": {
+    "file": "table.png",
+    "w": 576,
+    "h": 519
+  },
+  "side": {
+    "file": "side.png",
+    "w": 230,
+    "h": 138
+  },
+  "pot": {
+    "small": {
+      "file": "pot-small.png",
+      "w": 26,
+      "h": 40
+    },
+    "medium": {
+      "file": "pot-medium.png",
+      "w": 59,
+      "h": 51
+    },
+    "large": {
+      "file": "pot-large.png",
+      "w": 85,
+      "h": 83
+    }
+  }
+}

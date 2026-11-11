@@ -1,0 +1,47 @@
+/*
+ * The Hall's shared palette for the table rooms: Resurrect 64 by Kerrie Lake (lospec.com/palette-list/resurrect-64,
+ * art-source/palette/resurrect-64.hex). One palette for both rooms, so the card room and the saloon read as one place.
+ * Roles first; every value is one of the 64. Lamplight does the work: warm brass in the middle, plum shadow at the edges,
+ * and Midnight City's purple and teal as the second light.
+ */
+:root {
+  /* shadow and wood */
+  --r64-ink: #2e222f;          /* deepest shadow */
+  --r64-shade: #3e3546;        /* leather, panel ground */
+  --r64-plum-0: #45293f;       /* plum wood, dark */
+  --r64-plum-1: #6b3e75;       /* plum wood, lit */
+  --r64-wine-wood: #753c54;    /* red-brown wood */
+  --r64-oxblood: #6e2727;      /* deep red-brown */
+  --r64-rust: #9e4539;         /* wood grain catching light */
+  --r64-dust: #625565;         /* grey wood, greyed buttons */
+  --r64-dust-hi: #7f708a;
+  /* lamplight and brass */
+  --r64-brass-0: #cd683d;
+  --r64-brass-1: #f79617;
+  --r64-brass-2: #f9c22b;
+  --r64-brass-3: #fbb954;
+  --r64-lamp: #fbff86;         /* the hottest point of the lamp */
+  /* blood red, for Call liar and danger */
+  --r64-blood-0: #ae2334;
+  --r64-blood-1: #e83b3b;
+  /* Midnight City through the window */
+  --r64-night-0: #323353;
+  --r64-night-1: #484a77;
+  --r64-violet: #905ea9;
+  --r64-lilac: #a884f3;
+  --r64-teal-0: #0b5e65;
+  --r64-teal-1: #0eaf9b;
+  --r64-teal-2: #30e1b9;
+  /* green, for pass and go */
+  --r64-felt-0: #165a4c;
+  --r64-felt-1: #239063;
+  --r64-felt-2: #1ebc73;
+  /* ivory: dice, cards, text on dark */
+  --r64-ivory: #fdcbb0;
+  --r64-bone: #c7dcd0;
+  --r64-white: #ffffff;
+
+  /* the chunky Balatro-style button: a bright fill, a hard shadow with no blur */
+  --move-shadow: 0 4px 0 var(--r64-ink), 0 6px 0 rgba(0, 0, 0, 0.35);
+  --move-shadow-pressed: 0 1px 0 var(--r64-ink);
+}

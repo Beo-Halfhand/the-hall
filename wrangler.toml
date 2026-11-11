@@ -1,0 +1,110 @@
+# Production only: `wrangler deploy` reads this. Local dev and tests use wrangler.dev.toml, because an [ai]
+# binding makes `wrangler dev` go to Cloudflare with your stored login. Don't run `wrangler dev` on this file.
+name = "sealed-hand"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+send_metrics = false
+
+# Home is halfhand.app. The Worker sends sealedhand.halfhand.dev there with a 301, except /recover.
+routes = [
+  { pattern = "halfhand.app", custom_domain = true },
+  { pattern = "sealedhand.halfhand.dev", custom_domain = true },
+]
+
+# The room's radio: an https stream address. Empty hides the button. Credit is the line shown under it.
+[build]
+command = "node scripts/check-cage-config.mjs wrangler.toml"
+
+[vars]
+RADIO_URL = "https://radio.midnightradio.cloud/listen/midnight-radio/radio.mp3"
+RADIO_CREDIT = ""
+# One-time purse restoration: "<playerId>:<chips>". Leave empty. See src/platform/chips.js.
+PURSE_GRANT = ""
+# tNIGHT on (The owner, 11-10, L2): tNIGHT tables on Preprod (test tokens, no real money) on cage v4b, the same cage as staging. Live's
+# tables are numbered from 2000: chain tables 1001-1004 were used by the two-site judge's test stand-in, and staging owns 101-1000.
+# Needs the two-site judge pointed at this Worker and the JUDGE_TOKEN and INDEXER_KEY secrets. No seal anchoring on live (no anchor
+# settings, no anchor queue binding): the seal anchor refuses live hosts, and the queue's migration would block a rollback.
+TNIGHT_TABLES = "on"
+CAGE_ADDRESS = "3ac0427139f8008df29a7aec1476e7efaca05c69f8dd1a3968edd6cdbe5cd6e4"
+CAGE_TABLE_BASE = "2000"
+WALLET_PAGE = "on"
+INDEXER_UPSTREAM = "https://midnight-preprod.blockfrost.io/api/v0"
+
+# Bot voices and suggested quick lines. The model name is in src/platform/voice.js.
+[ai]
+binding = "AI"
+
+[assets]
+# Built by `node scripts/preview-build.mjs` before every deploy: public/ plus the cage's address and the contract code the cage
+# page runs (wallet-app/, from sealed-cage's deployment.cage3.json). Deploying from public/ alone would leave /wallet without them.
+directory = "./.preview-dist"
+binding = "ASSETS"
+run_worker_first = true # so the Worker can redirect the old address and set page headers
+
+[[durable_objects.bindings]]
+name = "TABLE"
+class_name = "Table"
+
+[[durable_objects.bindings]]
+name = "PLAYER"
+class_name = "Player"
+
+[[durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "Directory"
+
+[[durable_objects.bindings]]
+name = "DICE_TABLE"
+class_name = "DiceTable"
+
+[[durable_objects.bindings]]
+name = "RECEIPTS"
+class_name = "ReceiptBook"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Table"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Player", "Directory"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["DiceTable"]
+
+[[migrations]]
+tag = "v4"
+new_sqlite_classes = ["ReceiptBook"]
+
+# Per-IP limits. Approximate and per Cloudflare location. Period must be 10 or 60 seconds.
+[[ratelimits]]
+name = "LIMIT_PLAYERS"
+namespace_id = "2001"
+simple = { limit = 5, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_TABLES"
+namespace_id = "2002"
+simple = { limit = 10, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_JOIN"
+namespace_id = "2003"
+simple = { limit = 20, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_SAY"
+namespace_id = "2004"
+simple = { limit = 30, period = 60 }
+
+[[ratelimits]]
+name = "LIMIT_INDEXER"
+namespace_id = "2005"
+simple = { limit = 240, period = 60 }
+
+# Per token (seat, player or door token), wherever it comes from: about 5 requests a second (11-08, bring your own agent).
+[[ratelimits]]
+name = "LIMIT_KEY"
+namespace_id = "2006"
+simple = { limit = 300, period = 60 }

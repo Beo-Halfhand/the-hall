@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cup &amp; Claim</title>
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/cage.css">
+  <link rel="stylesheet" href="/css/dice.css">
+  <link rel="stylesheet" href="/css/table3.css">
+  <link rel="stylesheet" href="/css/seat-cards.css">
+  <link rel="stylesheet" href="/css/receipt.css">
+  <link rel="stylesheet" href="/css/deal-show.css">
+  <link rel="stylesheet" href="/css/saloon.css">
+  <script type="module" src="/js/dice.js"></script>
+</head>
+<body class="table-page dice-page">
+  <header class="hud">
+    <a class="btn small" href="/">◂ The Hall</a> <!-- the top bar (js/nav.js) takes its place -->
+    <h1 class="title">Cup &amp; Claim</h1>
+    <p class="purse-bar" id="purse-bar" role="status"></p>
+    <div class="hud-right">
+      <span id="mode" class="tag"></span>
+      <button id="guide-open" class="btn small guide-btn" type="button" aria-label="How Cup &amp; Claim works, in short" title="How Cup &amp; Claim works, in short" hidden>?</button>
+      <button id="sound" class="btn small" type="button" aria-pressed="false">Sound off</button>
+    </div>
+  </header>
+
+  <main class="table3 saloon">
+    <!-- TOP: everyone at the table: their cup, how many dice under it, their last bid, and whose turn it is. -->
+    <section class="zone-top" aria-label="Players">
+      <div class="cups badges" id="cups" aria-label="The cups on the table"></div>
+    </section>
+
+    <!-- LEFT: the bids so far (newest at the bottom), the pot, your stack, the dice in play, and the one rule to remember. -->
+    <aside class="zone-left status-panel" id="status-panel" aria-label="The table at a glance">
+      <div class="status-bar sp-head" role="status">
+        <span id="phase">…</span>
+        <button class="btn small receipt-open" id="round-receipt-open" type="button" hidden>This round’s receipt</button>
+        <span class="pot-limit" id="pot-limit"></span>
+        <span id="clock" class="clock"></span>
+      </div>
+      <p class="sp-line" id="sp-line" aria-hidden="true"></p>
+      <div class="sp-rows">
+        <h3 class="sp-title">The bids</h3>
+        <ol class="ladder bid-ladder" id="bid-ladder" aria-label="Bids this round, newest last"></ol>
+        <dl class="sp-dl">
+          <div><dt>Pot</dt><dd><span class="pot"><img class="px coin" src="/art/coin.png" alt="">Pot <b id="pot">0</b></span></dd></div>
+          <div><dt>Your stack</dt><dd id="sp-stack">—</dd></div>
+          <div><dt>Dice in play</dt><dd id="sp-dice">—</dd></div>
+        </dl>
+        <p class="wild-note"><b>1s are wild</b>: a 1 counts as whatever number is bid.</p>
+        <p class="wild-note" id="scope-note">Bids count every die at the table, not just yours.</p>
+      </div>
+    </aside>
+
+    <!-- CENTRE: the saloon, and the bid to beat, big. -->
+    <section class="zone-mid" aria-label="The saloon">
+      <div class="scene-wrap dice-scene-wrap">
+        <div class="scene dice-scene" id="scene"></div>
+      </div>
+      <div class="bid-board felt-bid" id="felt-bid" hidden></div>
+      <section class="reveal" id="reveal" hidden aria-label="The call, shown"></section>
+      <p class="talk-line" id="talk-line" aria-live="polite" hidden></p>
+    </section>
+
+    <!-- CENTRE, under the room: your cup (the cup lifts for you only) and what you hold, or the way to a seat. -->
+    <section class="zone-hand" aria-label="Your cup">
+      <section class="box" id="join-box" hidden aria-labelledby="join-title">
+        <h2 class="box-title" id="join-title">Take a seat</h2>
+        <p class="prose" id="join-note"></p>
+        <form id="join-form" class="seat-form" novalidate>
+          <label id="join-name-label">Name <input id="join-name" maxlength="24" autocomplete="off"></label>
+          <label class="buyin-row" id="join-buyin-row">Bring: <input id="join-buyin" type="number" inputmode="numeric" min="1" step="1" placeholder="All"> <span id="join-buyin-of"></span></label>
+          <button class="btn primary" id="join-submit" type="submit">Sit down</button>
+        </form>
+        <button class="btn" id="join-topup" type="button" hidden>Take the free top-up</button>
+      </section>
+      <section class="box cup-box" id="cup-box" aria-labelledby="cup-title">
+        <h2 class="box-title" id="cup-title">Your cup</h2>
+        <div class="cup-stage" id="cup-stage">
+          <div class="cup-felt" id="cup-felt">
+            <div class="my-dice" id="my-dice"></div>
+            <div class="cup-sprite" id="cup-sprite" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p class="hold-now" id="hold-now" hidden></p>
+        <p class="counts" id="counts" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <!-- RIGHT: your move: the count and the face, then Bid and Call liar, then Leave, Cash out, Move. -->
+    <section class="zone-right" aria-label="Your moves">
+      <section class="box" id="action-box" aria-labelledby="action-title">
+        <h2 class="box-title" id="action-title">Your move</h2>
+        <p class="to-beat" id="to-beat" hidden></p>
+        <p class="line" id="turn-line" aria-live="polite"></p>
+        <p class="seating" id="seating" role="status" hidden></p>
+        <section class="after-round" id="after-round" hidden aria-label="How the round went for you"></section>
+        <div id="actions" class="menu dice-menu"></div>
+        <div class="move-row dice-moves" id="move-row" role="group" aria-label="Your moves"></div>
+        <p class="move-reason" id="move-reason" role="status" hidden></p>
+        <div class="add-chips" id="add-chips" hidden>
+          <div class="add-chips-row">
+            <button class="btn" id="add-chips-open" type="button">Add chips</button>
+            <button class="btn primary" id="fill-up" type="button" hidden>Fill up to 1,000</button>
+            <p class="purse-line" id="purse-line" role="status"></p>
+          </div>
+          <form class="add-chips-form" id="add-chips-form" novalidate hidden>
+            <label class="buyin-row">Add: <input id="add-chips-amount" type="number" inputmode="numeric" min="1" step="1"> <span id="add-chips-of"></span></label>
+            <div class="raise-amounts" id="add-chips-presets"></div>
+            <button class="btn primary" id="add-chips-confirm" type="submit"></button>
+          </form>
+        </div>
+        <p class="error" id="error" role="alert"></p>
+        <div class="leave-row"><button class="btn small" id="leave" type="button" hidden></button></div>
+      </section>
+    </section>
+
+    <!-- The strip under it all: what this table shows, the call once it's counted, the round's receipt, the rules, who you're trusting, the talk. -->
+    <div class="zone-strip">
+      <section class="box" id="call-box" hidden aria-labelledby="call-title">
+        <h2 class="box-title" id="call-title">The call</h2>
+        <div id="call"></div>
+      </section>
+      <section class="box" id="round-receipt" hidden aria-labelledby="round-receipt-title">
+        <h2 class="box-title" id="round-receipt-title">This round's receipt</h2>
+        <div id="round-receipt-body"></div>
+      </section>
+      <section class="box trust" id="trust" aria-labelledby="trust-title">
+        <h2 class="box-title" id="trust-title">Who you’re trusting</h2>
+        <dl class="trust-list">
+          <div><dt>Your cup</dt><dd>Other players never see it. The house deals it.</dd></div>
+          <div><dt>Chips moved and settled</dt><dd id="trust-chips">Play chips, on the house’s ledger. Nothing here goes on chain.</dd></div>
+          <div><dt>The count</dt><dd id="trust-count">The dice are locked by fingerprint at the deal. The house vouches for the count: that’s the house’s word, for now.</dd></div>
+        </dl>
+        <p class="plaque-line quiet-plaque">I choose what to show: the dice, or just the count.</p>
+      </section>
+      <section class="box" aria-labelledby="rules-title">
+        <details class="rules" id="rules">
+          <summary class="box-title" id="rules-title">How to play</summary>
+          <button class="btn small guide-again" id="guide-again" type="button" hidden>Tally’s walkthrough, in short</button>
+          <ol class="prose rules-list">
+            <li>Everyone antes 5 and gets five dice under a cup. Only you see yours. <b>1s are wild</b>: a 1 counts as whatever number you need.</li>
+            <li><b>Bids count every die at the table, not just yours.</b> A bid is a guess about <em>everyone's</em> dice together: "at least 7 threes" means seven or more dice on the whole table show a 3. Everyone has five dice, so a table of four has 20 in all; the page shows the real number.</li>
+            <li>On your turn, bid higher, or call <b>Liar!</b> You can bid more dice, or the same number of dice on a higher die. <em>Example: Old Wick says at least 7 threes. You can say 8 threes, or 7 fours, or call Liar.</em></li>
+            <li>You can add a chip raise to your bid, up to 25. If someone raised, you owe that much to stay in, and the Bid button pays it. Or fold: you sit the round out and your chips stay in the pot.</li>
+            <li>No raise can push the pot past 500. When none fits, the table says <b>Pot limit reached</b>.</li>
+            <li>Calling Liar is free. Then every cup still in answers: <b>keep the cup shut</b> (only your number of those dice goes out, and the house vouches for it) or <b>show and prove</b> (your dice are shown, and you earn an open-hand mark). The table is counted. If the bid holds, the caller lost the call; if it falls, the bidder did. <b>The loser of the call pays.</b> Everyone else still in gets their own chips back, plus an equal share of the loser's chips and of any chips from players who folded. A caller who was right gets a double share. At a two-player table that is the old rule: the winner takes the pot.</li>
+            <li>Every roll comes from two secrets sealed before anyone looks: yours and the house's. The commitments are on the table from the deal, and the house secret is opened when the round ends. On a tNIGHT table the chips settle on chain, and every round has a numbered public receipt. The counts themselves are the house's word.</li>
+          </ol>
+        </details>
+      </section>
+      <section class="box talk" aria-labelledby="log-title">
+        <h2 class="box-title" id="log-title">Table talk</h2>
+        <div class="log" id="log" tabindex="0" aria-label="Table log"></div>
+        <form id="say-form" class="say" hidden>
+          <div class="quick" id="quick"></div>
+          <div class="say-row">
+            <input id="say-input" maxlength="120" autocomplete="off" aria-label="Say something" placeholder="Say something…">
+            <button class="btn" type="submit">Say</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <!-- Support the build: one slim line on every public page (11-08); the addresses open on a tap. Filled by js/support.js. -->
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+</body>
+</html>

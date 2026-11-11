@@ -1,0 +1,16 @@
+/* The test build's "What to test" page. Boxes and type from inn.css and agents.css. */
+.test-rule { margin: 8px 0 0; padding: 8px 10px; background: var(--ink); border: 2px solid var(--wine-3); border-radius: 8px; line-height: 1.35; }
+.test-rule b { color: var(--amber-2); }
+.test-jump { margin: 10px 0 0; padding-left: 22px; display: grid; gap: 6px; font: 500 17px/1.3 var(--label); }
+.test-jump .quiet { font-size: 14px; color: var(--slate-3); }
+.test-track .box-title { display: flex; align-items: center; gap: 10px; }
+.track-n { flex: 0 0 auto; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--amber-1); color: var(--ink); font: 700 17px/1 var(--label); }
+.test-steps { margin: 0 0 12px; padding-left: 22px; display: grid; gap: 8px; line-height: 1.4; }
+.test-h3 { margin: 12px 0 4px; }
+.test-tell { margin: 0; padding-left: 20px; display: grid; gap: 4px; line-height: 1.35; }
+.test-next { margin: 10px 0 0; padding: 8px 10px; border-left: 3px solid var(--slate-3); background: rgba(255, 255, 255, 0.04); line-height: 1.35; }
+.test-next.on { border-left-color: #2a7d68; background: rgba(42, 125, 104, 0.15); }
+.test-track.off { opacity: 0.6; }
+.test-step0 { margin: 8px 0 10px; padding: 8px 10px; border-left: 3px solid var(--amber-1); background: rgba(249, 194, 43, 0.1); line-height: 1.4; }
+.test-tag { margin-left: 8px; vertical-align: middle; font-size: 12px; background: var(--night-2); color: var(--slate-3); border-color: var(--night-3); }
+.test-only[hidden] { display: none; }

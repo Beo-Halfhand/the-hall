@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Records · The Hall</title>
+  <meta name="description" content="Every round at the Hall has a public number. Look one up by table and round, and recheck its dice.">
+  <meta property="og:title" content="Records · The Hall">
+  <meta property="og:description" content="Every round at the Hall has a public number. Look one up by table and round, and recheck its dice.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="halfhand.app">
+  <meta property="og:url" content="https://halfhand.app/records">
+  <meta property="og:image" content="https://halfhand.app/og.jpg?v=3">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Hall, Sealed Hand and Cup &amp; Claim, halfhand.app: gold lettering over a lamplit room, a leather dice cup with gold dice and a few coins on a round wood table, and the City lit purple in the window.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Records · The Hall">
+  <meta name="twitter:description" content="Every round at the Hall has a public number. Look one up by table and round, and recheck its dice.">
+  <meta name="twitter:image" content="https://halfhand.app/og.jpg?v=3">
+  <meta name="theme-color" content="#c98a2e">
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/receipt.css">
+  <link rel="stylesheet" href="/css/records.css">
+  <script type="module" src="/js/records.js"></script>
+</head>
+<body class="receipt-page records-page">
+  <main class="receipt-wrap">
+    <p class="receipt-kicker"><a href="/">The Hall</a> · Records</p>
+    <h1>Round records</h1>
+    <p class="prose">Every round of Cup &amp; Claim and Sealed Hand has a public number: the game, the table, the round. The table shows it as “Table 3 · Round 41”. At Cup &amp; Claim, a fingerprint of the dice is posted here before they're seen, and the secrets are opened when the round ends, so anyone can recheck the dice. At Sealed Hand, a seal over the whole shuffled deck is posted before any card is dealt, and the seed and the deck open when the round ends, so anyone can rebuild every hand and recheck every claim's verdict.</p>
+    <form id="find" class="rec-find" novalidate role="search" aria-label="Find a round">
+      <label>Game
+        <select id="f-game" name="game"><option value="cup-and-claim">Cup &amp; Claim</option><option value="sealed-hand">Sealed Hand</option></select>
+      </label>
+      <label>Table <input id="f-table" name="table" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="3"></label>
+      <label>Round <input id="f-round" name="round" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="41"></label>
+      <label>Played for
+        <select id="f-kind" name="kind"><option value="">any</option><option value="play">play chips</option><option value="tnight">tNIGHT</option></select>
+      </label>
+      <button class="btn primary" type="submit" id="f-go">Find</button>
+      <button class="btn" type="button" id="f-clear">Latest</button>
+    </form>
+    <p class="prose" id="status" role="status">Reading the book…</p>
+    <ol id="list" class="rec-list"></ol>
+    <p><button class="btn" type="button" id="more" hidden>Older rounds</button></p>
+  </main>
+  <dialog class="receipt-pop" id="receipt" aria-labelledby="receipt-title">
+    <div id="receipt-body"></div>
+  </dialog>
+  <!-- Support the build: one slim line on every public page (11-08); the addresses open on a tap. Filled by js/support.js. -->
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+</body>
+</html>

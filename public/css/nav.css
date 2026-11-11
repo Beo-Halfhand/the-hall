@@ -1,0 +1,63 @@
+/* The top bar. It lives in the page's header row, so it takes no height of its own on a table page. */
+
+.topnav { position: relative; flex: 0 1 auto; min-width: 0; z-index: 40; }
+.nav-list { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 0; list-style: none; } /* a long bar wraps, never runs under the title or off the edge (11-07) */
+.nav-li { position: relative; }
+.nav-top[aria-current='page'] { box-shadow: inset 0 0 0 2px var(--amber-2), 0 2px 0 var(--wood-0); }
+.nav-top .caret { font-size: 12px; opacity: 0.85; }
+.nav-burger { display: none; }
+
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  min-width: 210px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: linear-gradient(180deg, var(--night-1), var(--night-0));
+  border: 3px solid var(--cream-0);
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px var(--ink), 0 8px 18px rgba(0, 0, 0, 0.55);
+}
+.nav-drop.open > .nav-menu { display: block; }
+@media (hover: hover) {
+  .nav-drop:hover > .nav-menu, .nav-drop:focus-within > .nav-menu { display: block; }
+  .nav-drop:hover::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 6px; } /* no gap to cross */
+}
+
+.nav-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  color: var(--cream-1);
+  font: 500 17px/1.15 var(--label);
+  text-decoration: none;
+  white-space: nowrap;
+}
+@media (pointer: coarse) { .nav-item { min-height: 44px; } }
+a.nav-item:hover, a.nav-item:focus-visible, button.nav-item:hover, button.nav-item:focus-visible { background: var(--night-2); color: var(--amber-3); }
+button.nav-item { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; } /* Menu → Player's actions, drawn as its links */
+.nav-item.soon { color: var(--slate-2); cursor: not-allowed; }
+.nav-item.soon small { font: italic 400 13px/1 var(--body); color: var(--slate-2); }
+
+/* Pages with no header of their own (receipts, the cage): a slim bar of the same colours. */
+.topbar { display: flex; align-items: center; padding: 8px 12px; background: var(--night-0); border-bottom: 4px solid var(--ink); box-shadow: inset 0 -2px 0 var(--night-2); }
+
+/* Narrow: one menu button, the whole list under it. */
+@media (max-width: 860px) {
+  .nav-burger { display: inline-flex; }
+  .nav-list { display: none; position: absolute; top: calc(100% + 2px); left: 0; z-index: 41; flex-direction: column; align-items: stretch; gap: 4px; min-width: 230px; padding: 8px; background: linear-gradient(180deg, var(--night-1), var(--night-0)); border: 3px solid var(--cream-0); border-radius: 10px; box-shadow: 0 0 0 2px var(--ink), 0 8px 18px rgba(0, 0, 0, 0.55); }
+  .nav-list.open { display: flex; }
+  .nav-top { width: 100%; justify-content: space-between; }
+  .nav-menu { position: static; display: none; min-width: 0; margin: 4px 0 2px 10px; box-shadow: none; border-width: 2px; }
+  .nav-drop.open > .nav-menu { display: block; }
+  .nav-drop:hover > .nav-menu, .nav-drop:focus-within > .nav-menu { display: none; }
+  .nav-drop.open:hover > .nav-menu, .nav-drop.open:focus-within > .nav-menu { display: block; }
+  .nav-drop:hover::after { display: none; }
+}

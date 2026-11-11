@@ -1,0 +1,25 @@
+{
+  "name": "sealed-hand",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Sealed Hand game server: Cloudflare Worker with one Durable Object per table.",
+  "scripts": {
+    "dev": "wrangler dev --config wrangler.dev.toml --port 8799",
+    "test": "node --test test/cards.test.js test/engine.test.js test/bots.test.js test/filter.test.js test/talk.test.js test/platform.test.js test/art.test.js test/cage.test.js test/wallet.test.js test/dice-engine.test.js test/dice-bots.test.js test/hand-records.test.js test/hand-seal.test.js test/board.test.js test/cage-config.test.js test/doorman.test.js test/table-art.test.js test/dice-proof-fair.test.js test/round-check.test.js test/anchor.test.js test/collusion.test.js test/chips-sim.test.js test/closures.test.js",
+    "test:api": "node --test test/api.test.js test/grant.test.js test/tnight-api.test.js test/dice-api.test.js test/dice-tnight-api.test.js test/indexer-api.test.js test/agents-api.test.js test/records-api.test.js test/v4-worker-api.test.js test/dice-proof-api.test.js test/anchor-api.test.js",
+    "test:v4": "node --test test/v4-acceptance.test.js",
+    "sim": "node scripts/sim.js",
+    "sim:dice": "node scripts/dice-sim.js",
+    "test:browser": "node --test test/browser.test.js test/wallet-browser.test.js test/dice-browser.test.js test/dice-tnight-browser.test.js test/records-browser.test.js test/hall-entry-browser.test.js test/anchor-browser.test.js",
+    "art": "node scripts/art/build.js",
+    "art:ingest": "node scripts/art/ingest.mjs",
+    "art:cards": "node scripts/art/cards.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1",
+    "sharp": "0.35.5",
+    "wrangler": "^4.156.2"
+  }
+}

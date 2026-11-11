@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sealed Hand</title>
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/cage.css">
+  <link rel="stylesheet" href="/css/table3.css">
+  <link rel="stylesheet" href="/css/seat-cards.css">
+  <link rel="stylesheet" href="/css/receipt.css">
+  <link rel="stylesheet" href="/css/deal-show.css">
+  <script type="module" src="/js/table.js"></script>
+</head>
+<body class="table-page">
+  <header class="hud">
+    <a class="btn small" href="/">◂ The Hall</a> <!-- the top bar (js/nav.js) takes its place -->
+    <h1 class="title">Sealed Hand</h1>
+    <p class="purse-bar" id="purse-bar" role="status"></p>
+    <div class="hud-right">
+      <span id="mode" class="tag"></span>
+      <button id="guide-open" class="btn small guide-btn" type="button" aria-label="How Sealed Hand works, in short" title="How Sealed Hand works, in short" hidden>?</button>
+      <button id="sound" class="btn small" type="button" aria-pressed="false">Sound off</button>
+    </div>
+  </header>
+
+  <main class="table3">
+    <!-- TOP: everyone at the table, one card each: whose turn is lit, and what each seat just did. -->
+    <section class="zone-top" aria-label="Players">
+      <div class="plates badges" id="plates"></div>
+    </section>
+
+    <!-- LEFT: the round, in one place: the phase, this round's moves as they happen, the pot, your stack, whose turn. On a phone, one line. -->
+    <aside class="zone-left status-panel" id="status-panel" aria-label="The table at a glance">
+      <div class="status-bar sp-head" role="status">
+        <span id="phase">…</span>
+        <button class="btn small receipt-open" id="round-receipt-open" type="button" hidden>This round’s receipt</button>
+        <span class="pot-limit" id="pot-limit" hidden>Pot limit reached</span>
+        <span id="clock" class="clock"></span>
+      </div>
+      <p class="sp-line" id="sp-line" aria-hidden="true"></p>
+      <h3 class="sp-title">This round</h3>
+      <ol class="ladder round-log" id="round-log" aria-label="This round's moves, newest last"></ol>
+      <dl class="sp-rows" id="sp-rows">
+        <div class="sp-beat"><dt>Claim to beat</dt><dd id="sp-beat">—</dd></div>
+        <div><dt>Pot</dt><dd><span class="pot"><img class="px coin" src="/art/coin.png" alt="">Pot <b id="pot">0</b></span></dd></div>
+        <div id="sp-seal-row" hidden><dt>Deck seal</dt><dd><code id="sp-seal" class="sp-seal"></code> <small id="sp-seal-note" class="sp-seal-note"></small></dd></div>
+        <div><dt>Your stack</dt><dd id="sp-stack">—</dd></div>
+        <div><dt>Passes left</dt><dd id="sp-passes">—</dd></div>
+        <div><dt>Round</dt><dd id="sp-round">—</dd></div>
+        <div class="sp-turn"><dt>Whose turn</dt><dd id="sp-turn">—</dd></div>
+      </dl>
+    </aside>
+
+    <!-- CENTRE: the room. It sets the scene, shows the pot and the claim banner, and keeps no books. -->
+    <section class="zone-mid" aria-label="The table">
+      <div class="scene-wrap">
+        <div class="scene" id="scene"></div>
+        <p class="claim-banner" id="claim-banner" hidden></p>
+      </div>
+      <p class="talk-line" id="talk-line" aria-live="polite" hidden></p>
+    </section>
+
+    <!-- CENTRE, under the room: your hand (or the way to a seat). -->
+    <section class="zone-hand" aria-label="Your hand">
+      <section class="box" id="join-box" hidden aria-labelledby="join-title">
+        <h2 class="box-title" id="join-title">Take a seat</h2>
+        <p class="prose" id="join-note"></p>
+        <form id="join-form" class="seat-form" novalidate>
+          <label id="join-name-label">Name <input id="join-name" maxlength="24" autocomplete="off"></label>
+          <label class="buyin-row" id="join-buyin-row">Bring: <input id="join-buyin" type="number" inputmode="numeric" min="1" step="1" placeholder="All"> <span id="join-buyin-of"></span></label>
+          <button class="btn primary" id="join-submit" type="submit">Sit down</button>
+        </form>
+        <button class="btn" id="join-topup" type="button" hidden>Take the free top-up</button>
+      </section>
+      <section class="box" id="hand-box" aria-labelledby="hand-title">
+        <h2 class="box-title" id="hand-title">Your hand</h2>
+        <div class="hand" id="hand"></div>
+      </section>
+    </section>
+
+    <!-- RIGHT: your move: one row of moves (a move you can't make now stays, greyed, and says why on a tap), then the panel, Leave, Cash out, Move. -->
+    <section class="zone-right" aria-label="Your moves">
+      <div class="move-row" id="move-row" role="group" aria-label="Your moves"></div>
+      <p class="move-reason" id="move-reason" role="status" hidden></p>
+      <section class="box drawer" id="action-box" aria-labelledby="action-title">
+        <h2 class="box-title" id="action-title">Your move</h2>
+        <div class="facing" id="facing" role="status" hidden></div>
+        <p class="to-beat" id="to-beat" hidden></p>
+        <p class="line" id="turn-line" aria-live="polite"></p>
+        <p class="seating" id="seating" role="status" hidden></p>
+        <div class="hand-confirm" id="hand-confirm"></div>
+        <ol class="pass-log" id="pass-log" aria-label="Your passes this round"></ol>
+        <section class="after-round" id="after-round" hidden aria-label="How the round went for you"></section>
+        <div class="round-result" id="round-result" hidden aria-labelledby="round-result-title"></div>
+        <div id="actions" class="menu"></div>
+        <div class="add-chips" id="add-chips" hidden>
+          <div class="add-chips-row">
+            <button class="btn" id="add-chips-open" type="button">Add chips</button>
+            <button class="btn primary" id="fill-up" type="button" hidden>Fill up to 1,000</button>
+            <p class="purse-line" id="purse-line" role="status"></p>
+          </div>
+          <form class="add-chips-form" id="add-chips-form" novalidate hidden>
+            <label class="buyin-row">Add: <input id="add-chips-amount" type="number" inputmode="numeric" min="1" step="1"> <span id="add-chips-of"></span></label>
+            <div class="raise-amounts" id="add-chips-presets"></div>
+            <button class="btn primary" id="add-chips-confirm" type="submit"></button>
+          </form>
+        </div>
+        <p class="error" id="error" role="alert"></p>
+        <div class="leave-row"><button class="btn small" id="leave" type="button" hidden></button></div>
+      </section>
+    </section>
+
+    <!-- The strip under it all: the claims, who you're trusting, the talk. -->
+    <div class="zone-strip">
+      <section class="box" aria-labelledby="claims-title">
+        <h2 class="box-title" id="claims-title">Claims</h2>
+        <ul class="claims" id="claims"></ul>
+      </section>
+      <section class="box trust" id="trust" aria-labelledby="trust-title">
+        <h2 class="box-title" id="trust-title">Who you’re trusting</h2>
+        <dl class="trust-list">
+          <div><dt>Your cards</dt><dd>Other players never see them. The house deals them.</dd></div>
+          <div><dt>Chips moved and settled</dt><dd id="trust-chips">Play chips, on the house’s ledger. Nothing here goes on chain.</dd></div>
+          <div><dt>The claim check</dt><dd>The house checks a called claim against the hand. That’s the house’s word, for now.</dd></div>
+        </dl>
+      </section>
+      <section class="box" aria-labelledby="rules-title">
+        <details class="rules" id="rules">
+          <summary class="box-title" id="rules-title">How to play</summary>
+          <button class="btn small guide-again" id="guide-again" type="button" hidden>Tally’s walkthrough: one lap</button>
+          <ol class="prose rules-list">
+            <li>Everyone antes 5 and gets five cards. Only you see yours.</li>
+            <li><b>Pass.</b> Everyone picks one card and slides it to the next seat, all at once: two passes at least, five at most. A pass can carry a raise, 1 to 25. Facing a raise, you pay it to <b>stay in</b>, or fold.</li>
+            <li><b>Stop &amp; claim.</b> From the second pass, anyone can stop the passing with a claim, unless a raise is out that pass. Nobody stops by the fifth, and whoever started the round opens.</li>
+            <li><b>The claim lap</b> goes round once, from the next seat. On your turn: <b>Claim</b> a poker hand better than the one to beat, true or a bluff; <b>Check</b> to let the claim stand, free; or <b>Call</b> a claim you think is a bluff. Any of those can carry a raise above the highest so far.</li>
+            <li><b>A call</b> is checked by the house against the hand. A bluff pays the caller 5 and drops out of the pot; a true claim costs the caller 5. The table only hears true or false.</li>
+            <li><b>Stay in or fold.</b> Facing a raise, you pay only the difference to stay in. Fold, and your claim is gone and what you paid stays in the pot. After the lap, anyone short of the highest raise gets one turn to stay in or fold, and can call a claim as they do.</li>
+            <li><b>The pot</b> stops at 500 a round. The best standing claim takes two thirds, rounded up; the second best takes the rest; one alone takes the lot. A bluff nobody called still counts. No claims, and the pot waits for the next round.</li>
+            <li><b>The deck seal.</b> The deck is shuffled from a seed and sealed before any card moves, and the seal is on the table. When the round ends the seed and the deck open on the round’s receipt, so every hand and every verdict can be rechecked.</li>
+          </ol>
+        </details>
+      </section>
+      <section class="box talk" aria-labelledby="log-title">
+        <h2 class="box-title" id="log-title">Table talk</h2>
+        <div class="log" id="log" tabindex="0" aria-label="Table log"></div>
+        <form id="say-form" class="say" hidden>
+          <div class="quick" id="quick"></div>
+          <div class="say-row">
+            <input id="say-input" maxlength="120" autocomplete="off" aria-label="Say something" placeholder="Say something…">
+            <button class="btn" type="submit">Say</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <!-- Support the build: one slim line on every public page (11-08); the addresses open on a tap. Filled by js/support.js. -->
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+</body>
+</html>

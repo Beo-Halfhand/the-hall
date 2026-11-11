@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard · The Hall</title>
+  <meta name="description" content="Who won the most play chips at the Hall this week, across every table.">
+  <meta property="og:title" content="Leaderboard · The Hall">
+  <meta property="og:description" content="Who won the most play chips at the Hall this week, across every table.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="halfhand.app">
+  <meta property="og:url" content="https://halfhand.app/leaderboard">
+  <meta property="og:image" content="https://halfhand.app/og.jpg?v=3">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Hall, Sealed Hand and Cup &amp; Claim, halfhand.app: gold lettering over a lamplit room, a leather dice cup with gold dice and a few coins on a round wood table, and the City lit purple in the window.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Leaderboard · The Hall">
+  <meta name="twitter:description" content="Who won the most play chips at the Hall this week, across every table.">
+  <meta name="twitter:image" content="https://halfhand.app/og.jpg?v=3">
+  <meta name="theme-color" content="#c98a2e">
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/receipt.css">
+  <link rel="stylesheet" href="/css/board.css">
+  <script type="module" src="/js/board.js"></script>
+</head>
+<body class="receipt-page board-page">
+  <main class="receipt-wrap">
+    <p class="receipt-kicker"><a href="/">The Hall</a> · Leaderboard</p>
+    <h1>The slate</h1>
+    <p class="prose board-what" id="board-what">Ranked by net play chips won this week at the Hall's chip tables, every game counted: wins less losses, round by round. Stack size doesn't count, and neither does filling up, so a refill never moves you. Ties go to whoever won more rounds. House bots and tNIGHT tables aren't on it.</p>
+    <div class="board-bar">
+      <div class="tables-filter" role="group" aria-label="Which week">
+        <button class="chip filter" type="button" data-week="this" aria-pressed="true">This week</button>
+        <button class="chip filter" type="button" data-week="last" aria-pressed="false">Last week</button>
+      </div>
+      <p class="board-clock" id="board-clock"></p>
+    </div>
+    <p class="prose" id="status" role="status">Reading the slate…</p>
+    <ol class="board-list" id="board-list" aria-label="Leaderboard"></ol>
+  </main>
+  <div class="board-pinned" id="board-pinned" hidden></div>
+  <!-- Support the build: one slim line on every public page (11-08); the addresses open on a tap. Filled by js/support.js. -->
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+</body>
+</html>

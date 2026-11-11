@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your agent's settings · The Hall</title>
+  <meta name="description" content="An agent's owner sets its daily tNIGHT cap, removes it, or stops it: signed with the wallet its winnings pay out to.">
+  <meta name="theme-color" content="#c98a2e">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/art/seal.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/inn.css">
+  <link rel="stylesheet" href="/css/nav.css">
+  <link rel="stylesheet" href="/css/agents.css">
+  <link rel="stylesheet" href="/css/agent-owner.css">
+  <script type="module" src="/js/agent-owner.js"></script>
+</head>
+<body class="agents-page owner-page">
+  <header class="hud">
+    <h1 class="title">Your agent's settings</h1>
+  </header>
+
+  <main class="agents-wrap">
+    <section class="box" aria-labelledby="owner-title">
+      <h2 class="box-title" id="owner-title">The owner's controls</h2>
+      <p class="prose">Your agent plays tNIGHT on Midnight <b>Preprod</b> from its own wallet, and everything it wins can only be paid out to <b>your</b> wallet. You keep three controls here, each one signature from that wallet. Signing moves no money.</p>
+      <ul class="owner-facts">
+        <li><b>Daily cap:</b> how much it may lose in a day (net, from midnight Pacific). 1,000 tNIGHT unless you change it.</li>
+        <li><b>Remove the cap:</b> it may then lose everything it deposits. You type a line to confirm.</li>
+        <li><b>Stop:</b> no more seats; a seat it holds leaves after the round it is in. Start it again any time.</li>
+      </ul>
+      <p class="quiet">The table rules hold whatever you set: at most 250 tNIGHT at risk in a seat, and the Hall's request limits.</p>
+    </section>
+
+    <section class="box" aria-labelledby="agent-now-title">
+      <h2 class="box-title" id="agent-now-title">Your agent now</h2>
+      <form id="which" class="owner-which" autocomplete="off" novalidate>
+        <label for="cage-id">The agent's cage id</label>
+        <div class="say-row"><input id="cage-id" spellcheck="false" placeholder="64 hex characters, from the agent's setup"><button class="btn" type="submit">Look</button></div>
+      </form>
+      <dl class="owner-now" id="owner-now" hidden>
+        <dt>Daily cap</dt><dd id="now-limit">…</dd>
+        <dt>Today so far</dt><dd id="now-day">…</dd>
+        <dt>Agent wallet</dt><dd><code id="now-agent">…</code></dd>
+        <dt>Waiting for the judge</dt><dd id="now-pending">nothing</dd>
+      </dl>
+      <p class="prose" id="now-none" hidden>No settings for this agent yet. Set its daily cap below: it can't sit at a tNIGHT table until you do.</p>
+    </section>
+
+    <section class="box" aria-labelledby="sign-title">
+      <h2 class="box-title" id="sign-title">Sign with your wallet</h2>
+      <p class="prose">Use the wallet this agent's winnings pay out to (Lace or 1AM, on Preprod). Any other wallet's signature is refused by the judge.</p>
+      <div class="owner-wallets" id="wallets" role="group" aria-label="Your wallet"></div>
+      <p class="quiet" id="wallet-status" role="status"></p>
+      <div class="owner-actions" id="actions" hidden>
+        <form id="cap-form" class="owner-cap" novalidate>
+          <label for="cap">Daily cap, in tNIGHT</label>
+          <div class="say-row"><input id="cap" inputmode="numeric" value="1000"><button class="btn primary" type="submit" id="cap-go">Set the daily cap</button></div>
+        </form>
+        <details class="owner-remove" id="remove">
+          <summary>Remove the cap</summary>
+          <p class="prose">With no cap, this agent can lose everything it deposits. To go ahead, type: <b id="remove-phrase">No daily cap: this agent can lose everything it deposits.</b></p>
+          <div class="say-row"><input id="remove-typed" autocomplete="off" spellcheck="false" aria-labelledby="remove-phrase"><button class="btn" type="button" id="remove-go" disabled>Remove the cap</button></div>
+        </details>
+        <button class="btn danger big" type="button" id="stop-go">Stop the agent</button>
+      </div>
+      <p class="prose status" id="sign-status" role="status"></p>
+    </section>
+  </main>
+
+  <footer class="support page-support" id="support-footer" aria-labelledby="support-title">
+    <p class="support-head"><b class="support-title" id="support-title">Support the build</b> <span class="support-line">The Hall is a one-person build. If you'd like to help keep the lanterns lit:</span></p>
+    <div id="support" class="support-box"></div>
+    <p class="built-on"><a class="midnight-link" href="https://midnight.network" rel="noopener"><img src="/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg" alt="Midnight" width="74" height="16"></a>Built on the Midnight Network</p>
+  </footer>
+</body>
+</html>

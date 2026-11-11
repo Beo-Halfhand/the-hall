@@ -1,0 +1,13 @@
+node_modules
+.wrangler
+.dev.vars
+*.env*
+.preview-dist
+wallet-app/node_modules
+wallet-app/dist
+wallet-app/src/generated
+
+# rebuilt by scripts/art/table-room.py (the page serves public/art/dice/table-room-1152.webp)
+art-source/table-room/table-room-midnight.png
+wallet-app/src/generated-dice
+.sim-dev
