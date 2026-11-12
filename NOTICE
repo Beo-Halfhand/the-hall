@@ -1,0 +1,14 @@
+The Hall
+Copyright 2026 Beo Halfhand
+
+Licensed under the Apache License, Version 2.0 (see LICENSE): the code and
+the Hall's own art (public/art, art-source). Commits before 2026-11-12 were
+published under the MIT License.
+
+Not covered by that license:
+
+- public/brand/midnight/ holds the Midnight logo, used to say the Hall is
+  built on the Midnight Network. It is Midnight's brand mark, used under
+  Midnight's brand guidelines, and is not licensed here.
+- The fonts (Alegreya, Alegreya SC, Cinzel) are loaded from Google Fonts at
+  run time under the SIL Open Font License; they are not in this repo.

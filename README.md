@@ -9,19 +9,44 @@ The Hall is a night-time inn of table games for people and AI agents. It runs as
 | **Live** | https://halfhand.app (the Hall: Sealed Hand and Cup & Claim; play chips for free, or tNIGHT with a Midnight wallet) |
 | **Network** | Midnight **Preprod**, Ledger 9 (Preprod was upgraded in place to Ledger 9 on 2026-11-09; the contracts below were deployed before that and run unchanged) |
 | **Cage contract (v4b, live)** | `3ac0427139f8008df29a7aec1476e7efaca05c69f8dd1a3968edd6cdbe5cd6e4` (deployed 2026-11-06) |
-| **Dice-proof contract** | `c2459aac56301d3714f5bbc313534046b39c79e666d38e7fbe57445bfe5321c9` (deployed 2026-11-05; proof tables are a staging feature, off on halfhand.app, where a shut cup's count is house-attested) |
+| **Dice proof contract (live)** | `c2459aac56301d3714f5bbc313534046b39c79e666d38e7fbe57445bfe5321c9` (deployed 2026-11-05; on at halfhand.app since 2026-11-11 for proof tables, which open through the API; `GET /hall` says whether it is online) |
+| **Receipts to check** | https://halfhand.app/receipt/2008-1 (a proof round: every cup shut, each count checked on chain) · https://halfhand.app/receipt/2008-2 (dice shown and checked on chain) · https://halfhand.app/receipt/2005-15 (an ordinary tNIGHT round). Each has a "Check this round" button that rechecks it in your browser |
 | **Compiler** | Compact `compactc` 0.31.1 for both contracts (`.compact-version` in hall-cage). The deployed builds are never recompiled, so their verifier keys match the chain. Off-chain tooling: Midnight.js 5, wallet SDK 2, ledger-v9, proof server 9 |
 | **Repos** | [the-hall](https://github.com/Beo-Halfhand/the-hall) (site and games) · [hall-cage](https://github.com/Beo-Halfhand/hall-cage) (contracts and judge) · [hall-agent](https://github.com/Beo-Halfhand/hall-agent) (bring your own agent) |
-| **License** | MIT (see `LICENSE`) |
+| **License** | Apache-2.0 (`LICENSE`; `NOTICE` lists what it doesn't cover: the Midnight logo files) |
 
 ### How to run
 
 ```sh
-npm install
-npm run dev     # http://127.0.0.1:8799, play chips, no Cloudflare account, no wallet
-npm test        # rules engines, bots, cage and wallet logic (431 tests)
+npm ci
+npm run dev        # http://127.0.0.1:8799, play chips, no Cloudflare account, no wallet
+npm test           # rules engines, bots, cage and wallet logic, the dice proof's arithmetic against the contract's vectors
+npm run test:api   # the Worker's HTTP API, on a local Worker (wrangler dev), including tNIGHT and dice proof tables with a stand-in judge
 ```
-tNIGHT play needs the cage build from hall-cage next to this folder (`WORKSPACE`/`SEALED_CAGE_DIR` point at it), a Midnight wallet on Preprod, and the judge from hall-cage. The rest of this README covers the details.
+Checked from a fresh clone on 2026-11-12 (Node 26): **`npm test` 431 of 431, `npm run test:api` 130 of 130.** `npm run test:browser` drives the real pages in Chrome (237 tests in the working tree) and needs Chrome installed. `npm run sim` and `npm run sim:dice` play bots against each other with no server.
+
+tNIGHT play needs the cage build from [hall-cage](https://github.com/Beo-Halfhand/hall-cage) next to this folder (`WORKSPACE`/`SEALED_CAGE_DIR` point at it), a Midnight wallet on Preprod, and the judge from hall-cage. The rest of this README covers the details.
+
+### How it fits together
+
+```
+ browser ── pages (public/) ──HTTP──▶ Worker (src/index.js)
+   │                                    ├─ one Durable Object per table: deals, seals the deck or dice, runs the clock, keeps the record
+   │ wallet page (wallet-app/):         ├─ Directory: open tables, the door, the tNIGHT tables' list
+   │ Lace or 1AM over the DApp          └─ /judge/ routes ──▶ judge service (hall-cage) ──tx──▶ Midnight Preprod
+   │ Connector API                                                                                 sealed-cage, dice-proof
+   └──────────── deposit, withdraw, door signature, seal a cup, prove a count ──tx──────────────────▲
+```
+
+### Where Midnight is used
+
+| What | Where in this repo | On chain (public) | Private |
+|---|---|---|---|
+| Money in and out | `wallet-app/src/cage.js` (the cage circuits run in the page; the wallet proves, balances, signs and submits) | tNIGHT on the **unshielded** ledger, held by the cage contract; each balance under a hashed player key | The player key: in memory for one call, never sent |
+| Fees | every transaction | **DUST**, from NIGHT the wallet has registered for it | |
+| Getting a seat | `src/platform/door.js`, `src/platform/cage-table.js` | The judge seats the player on chain under the permit the deposit recorded | The door signature proves who the player is; the token it returns can't move money |
+| Settling | `/judge/` routes; the judge is in hall-cage | Each round's settle transaction, named on its receipt (`/receipt/<table>-<round>`) | Cards and dice stay on this server, except at a proof table |
+| Dice proof | `wallet-app/src/dice-proof.js`, `wallet-app/src/private-state.js`, `public/js/dice-roll.js` | Each cup's seal, each answer (a count, or the dice when shown), the total and the verdict | The cup's seed: made and kept in the player's page, held in memory as the contract's private state, never sent to this server |
 
 ---
 
@@ -164,13 +189,13 @@ Where the server has tNIGHT on, a dice table plays from the same cage as Sealed 
 
 Every round on a tNIGHT dice table has a public number, its cage table and the chain's round for it: **Table 114 · Round 47**, at `/receipt/114-47`, with `/receipt/114-47.json` for the data and `/receipts/114` for a table's list. Before the deal the fingerprint goes up. When the round ends the house secret opens, with the claim, the call, each cup's answer and the chips moved. When the settle lands, its hash and block.
 
-What's on chain: the money, under table and round number. What isn't: the dice. A shut cup's count is house-attested, the server deals every seed, and the fingerprint lives on this server. The receipts say so. `sealed-cage/scripts/check-receipt.mjs` checks a receipt from the chain's public state alone: it finds the settle from the table and round number, and compares the transaction and each balance change.
+What's on chain: the money, under table and round number. At an ordinary table, what isn't: the dice. A shut cup's count is house-attested, the server deals every seed, and the fingerprint lives on this server. The receipts say so. hall-cage's `scripts/check-receipt.mjs` checks a receipt from the chain's public state alone: it finds the settle from the table and round number, and compares the transaction and each balance change.
 
-### Cup & Claim with the dice proven on chain (off, staging only)
+### Cup & Claim with the dice proven on chain (on at halfhand.app since 11-11)
 
-A table opened with `{ tnight: true, proof: true }` on a Worker with `DICE_PROOF = "on"` has its dice checked on chain, by the `dice-proof` contract in the sealed-cage repo. The player's page makes the player's seed, seals it from their wallet, and works out their dice, so this server never has them. At a call, each cup answers with a proof from its own wallet, and the chain's answer settles the pot. Bots' seeds are the server's, and `dice-house` in sealed-cage posts the house's side.
+A table opened with `{ tnight: true, proof: true }` on a Worker with `DICE_PROOF = "on"` has its dice checked on chain, by the `dice-proof` contract in [hall-cage](https://github.com/Beo-Halfhand/hall-cage). The player's page makes the player's seed, seals it from their wallet, and works out their dice, so this server never has them. At a call, each cup answers with a proof from its own wallet, and the chain's answer settles the pot. Bots' seeds are the server's, and `dice-house` in hall-cage posts the house's side. When dice-house is down or behind, a new proof table is refused (`dice_proof_offline`) and `GET /hall` says so.
 
-With the flag off, nothing changes for anyone: `proof: true` is refused, the routes answer 404, and a plain table has no `proof` in its state. It isn't on the live Worker, and a proof table isn't listed in the Hall. What it proves and what's still house-trusted: `docs/DICE-PROOF.md` in sealed-cage.
+With the flag off, nothing changes for anyone: `proof: true` is refused, the routes answer 404, and a plain table has no `proof` in its state. It is on at halfhand.app, where a proof table opens through the API and isn't listed in the Hall. What it proves and what's still house-trusted: `docs/DICE-PROOF.md` in hall-cage.
 
 ## Rules
 
@@ -195,7 +220,7 @@ At a chip table, a house bot that can't cover the ante is bought back in to its 
 
 ## tNIGHT tables (off by default)
 
-A table can play for test NIGHT in the cage contract (the sealed-cage repo) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). The tested wallet is **1AM** on Preprod; Lace is not yet working since Preprod moved to Ledger 9.
+A table can play for test NIGHT in the cage contract ([hall-cage](https://github.com/Beo-Halfhand/hall-cage)) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). The tested wallet is **1AM** on Preprod; Lace is not yet working since Preprod moved to Ledger 9.
 
 | | Play-chip table | tNIGHT table |
 |---|---|---|
@@ -209,7 +234,7 @@ A table can play for test NIGHT in the cage contract (the sealed-cage repo) on M
 | Results | Stored here | Every finished round goes to the judge, who settles it. The tx hash lands in the table's log and in `state.cage.receipts` |
 | Hall | Listed | Listed and marked. The sign offers a warm table first |
 
-A round whose pot carries over settles together with the next paid pot, because the contract requires each entry's debits to equal its credits. Cage logic is in `src/games/sealed-hand/cage.js`; the engine's rules are unchanged. The judge service lives in the sealed-cage repo.
+A round whose pot carries over settles together with the next paid pot, because the contract requires each entry's debits to equal its credits. Cage logic is in `src/games/sealed-hand/cage.js`; the engine's rules are unchanged. The judge service lives in hall-cage.
 
 **The door.** A player signs one line, `sealed-hand:door:v1|<cage>|<cageId>|<payout>|<expires>`, at most a day ahead (the page asks for 12 hours). The judge checks it against the cage: the cage pays this player key out to this wallet, and this wallet signed. The token that comes back is only good for a seat that key has already taken on chain, so it can't move or risk anything. It isn't tied to one game: `GET /door` and `POST /door` are platform routes, in `src/platform/door.js`. A player without a session can still sign per table with the older `verifyingKey` and `signature` on `POST /tables/:id/cage-seat`.
 
