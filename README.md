@@ -33,7 +33,7 @@ tNIGHT play needs the cage build from [hall-cage](https://github.com/Beo-Halfhan
  browser ── pages (public/) ──HTTP──▶ Worker (src/index.js)
    │                                    ├─ one Durable Object per table: deals, seals the deck or dice, runs the clock, keeps the record
    │ wallet page (wallet-app/):         ├─ Directory: open tables, the door, the tNIGHT tables' list
-   │ Lace or 1AM over the DApp          └─ /judge/ routes ──▶ judge service (hall-cage) ──tx──▶ Midnight Preprod
+   │ 1AM (recommended) over the DApp    └─ /judge/ routes ──▶ judge service (hall-cage) ──tx──▶ Midnight Preprod
    │ Connector API                                                                                 sealed-cage, dice-proof
    └──────────── deposit, withdraw, door signature, seal a cup, prove a count ──tx──────────────────▲
 ```
@@ -220,7 +220,7 @@ At a chip table, a house bot that can't cover the ante is bought back in to its 
 
 ## tNIGHT tables (off by default)
 
-A table can play for test NIGHT in the cage contract ([hall-cage](https://github.com/Beo-Halfhand/hall-cage)) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). The tested wallet is **1AM** on Preprod; Lace is not yet working since Preprod moved to Ledger 9.
+A table can play for test NIGHT in the cage contract ([hall-cage](https://github.com/Beo-Halfhand/hall-cage)) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). Use **1AM** on Preprod: it's the wallet we recommend, tested end to end from buy-in to cash-out. Connecting with Lace has been unreliable on Preprod since it moved to Ledger 9, and we're working on it.
 
 | | Play-chip table | tNIGHT table |
 |---|---|---|
