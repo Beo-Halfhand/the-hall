@@ -5,10 +5,49 @@ Licensed under the Apache License, Version 2.0 (see LICENSE): the code and
 the Hall's own art (public/art, art-source). Commits before 2026-11-12 were
 published under the MIT License.
 
-Not covered by that license:
+EXCLUDED FROM THE APACHE LICENSE: MIDNIGHT'S LOGO
 
-- public/brand/midnight/ holds the Midnight logo, used to say the Hall is
-  built on the Midnight Network. It is Midnight's brand mark, used under
-  Midnight's brand guidelines, and is not licensed here.
+The Midnight name and logo are Midnight's trademarks. They are used here with
+attribution, to say the Hall is built on the Midnight Network, unaltered and
+under Midnight's brand guidelines. They are not licensed under Apache-2.0 or
+any other license by this repository, and no right to use them is granted.
+
+Files that contain Midnight's logo (the complete list, checked 2026-11-12):
+
+- public/brand/midnight/Midnight-RGB_Symbol-White.svg
+  (the official Midnight Logo Pack file 02_Symbol/Midnight-RGB_Symbol-White.svg,
+  byte for byte; test/table-art.test.js and test/art.test.js check that)
+- public/brand/midnight/Midnight-RGB_Logo-Horizontal-White.svg
+  (the official Midnight Logo Pack file
+  01_Symbol + Wordmark/Horizontal/Midnight-RGB_Logo-Horizontal-White.svg)
+- public/og.jpg (the link preview image: the Midnight symbol is on the wall,
+  left of the lantern)
+- docs/the-hall-deck.pdf (its screenshots of the site show the Midnight
+  symbol, e.g. on the shield above the door on page 1). The deck's own words
+  and layout are Apache-2.0; the screenshots of the site in it are not.
+
+Everywhere else the logo shows on the site, it is drawn at run time from the
+two SVG files above: the Sealed Hand card backs (the "midnight" card back, set
+by cardBack in public/js/hall-config.js and styled in public/css/inn.css, full
+size and mini), the marks laid over the Hall's room and the Cup & Claim table
+(public/js/room.js, public/js/dice.js, public/js/tapestry-mark.js), the
+"Built on the Midnight Network" line in each page's footer, and the turning
+symbol on a button that is waiting. The code that places them is Apache-2.0;
+the mark it shows is not. Any screenshot or recording of the site that shows
+those card backs, marks, footers or buttons shows Midnight's logo and is
+excluded in the same way.
+
+No other file in this repository contains Midnight's logo. Every image was
+checked: the other card back (public/art/cards.png, public/art/back-mini.png)
+is the Hall's own wax-seal hand, and the art in public/art and art-source has
+no Midnight mark painted in.
+
+OTHER THINGS NOT COVERED
+
 - The fonts (Alegreya, Alegreya SC, Cinzel) are loaded from Google Fonts at
   run time under the SIL Open Font License; they are not in this repo.
+- "Midnight Radio by TomJon & dvnc" is credited on the site when a stream is
+  configured. The stream is theirs, played from their address; no audio is in
+  this repo.
+- The Midnight SDK packages (@midnight-ntwrk/*) are dependencies installed from
+  npm under their own licenses; none of their code is copied into this repo.

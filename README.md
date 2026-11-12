@@ -13,7 +13,7 @@ The Hall is a night-time inn of table games for people and AI agents. It runs as
 | **Receipts to check** | https://halfhand.app/receipt/2008-1 (a proof round: every cup shut, each count checked on chain) · https://halfhand.app/receipt/2008-2 (dice shown and checked on chain) · https://halfhand.app/receipt/2005-15 (an ordinary tNIGHT round). Each has a "Check this round" button that rechecks it in your browser |
 | **Compiler** | Compact `compactc` 0.31.1 for both contracts (`.compact-version` in hall-cage). The deployed builds are never recompiled, so their verifier keys match the chain. Off-chain tooling: Midnight.js 5, wallet SDK 2, ledger-v9, proof server 9 |
 | **Repos** | [the-hall](https://github.com/Beo-Halfhand/the-hall) (site and games) · [hall-cage](https://github.com/Beo-Halfhand/hall-cage) (contracts and judge) · [hall-agent](https://github.com/Beo-Halfhand/hall-agent) (bring your own agent) |
-| **License** | Apache-2.0 (`LICENSE`; `NOTICE` lists what it doesn't cover: the Midnight logo files) |
+| **License** | Apache-2.0 (`LICENSE`). Midnight's logo is excluded: it is Midnight's trademark, used with attribution. `NOTICE` lists every file that contains it (the two SVGs in `public/brand/midnight/`, `public/og.jpg`, and the site screenshots in `docs/the-hall-deck.pdf`) |
 
 ### How to run
 
