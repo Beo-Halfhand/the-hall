@@ -220,7 +220,7 @@ At a chip table, a house bot that can't cover the ante is bought back in to its 
 
 ## tNIGHT tables (off by default)
 
-A table can play for test NIGHT in the cage contract ([hall-cage](https://github.com/Beo-Halfhand/hall-cage)) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). Use **1AM** on Preprod: it's the wallet we recommend, tested end to end from buy-in to cash-out. Lace isn't syncing preprod since the ledger 9 upgrade. Use 1AM for now.
+A table can play for test NIGHT in the cage contract ([hall-cage](https://github.com/Beo-Halfhand/hall-cage)) on Midnight preprod. It needs `TNIGHT_TABLES = "on"`, `CAGE_ADDRESS`, and a `JUDGE_TOKEN` secret. Without them, `tnight: true` is refused, the `/judge` routes are 404, and nothing else changes. Staging sets them, and **live has since 11-10** (cage v4b, live tables numbered from 2000, served by the two-site judge alongside staging; no seal anchoring on live). Use **1AM** on Preprod: it's the wallet we recommend, tested end to end from buy-in to cash-out. Lace 2.5.1 can't register tDUST on Preprod since the ledger 9 upgrade (a Lace bug). Use 1AM for now.
 
 | | Play-chip table | tNIGHT table |
 |---|---|---|
